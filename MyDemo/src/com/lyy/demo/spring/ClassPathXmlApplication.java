@@ -3,7 +3,6 @@ package com.lyy.demo.spring;
 import java.io.File;
 
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
 public class ClassPathXmlApplication implements ApplicationContext 
