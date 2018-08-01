@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HelloController
 {
 
-	  @RequestMapping(value="/world",method=RequestMethod.GET)
+	  @RequestMapping(value="/world", method=RequestMethod.GET)
 	  public String hello(Model model)
 	  {
 
+		  System.out.println("进入成功");
+		  
 	      model.addAttribute("msg", "你好spring mvc");
 
 	      return "index";
