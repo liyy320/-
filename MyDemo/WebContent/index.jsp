@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>lyy</title>
+<title>lyy-配置系统测试页面</title>
 </head>
 <body>
 	<h1>Hello spring</h1>

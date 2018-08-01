@@ -1,0 +1,69 @@
+@charset "utf-8";
+body{background-color: #009688 ;font-family: 微软雅黑;}
+.clear{clear: both}
+*{margin: 0; padding: 0;}
+.mod_login_top {height:90px;  background-color:#fff; border-top: 1px solid #0e8aa4}
+.login_logo{float: left; margin:20px 0 0 60px;}
+.logo_font{float:left;margin-left:10px;}
+.logo_font h2 {font-size:28px; font-weight:100; width:100%; line-height: 90px;}
+.login_box{width: 1100px;height: 350px; margin: 200px auto;}
+.login_font{width: 400px;float: left;color: #fff; margin-left: 100px }
+.login_form{width: 400px; float: right;margin-top: 30px}
+.mod_login{width:380px;height:310px;background:#fff;overflow:hidden;position:absolute;z-index:30}
+.mod_login .yzt_qrcode{width:100%}
+
+.mod_login_top .xzapp { float: left; display:inline-block; color:#999; height:24px; line-height:24px; padding-right:15px;}
+
+.mod_login .yzt_qrcode{position:absolute;top:0;width:100%}
+.mod_login .yzt_qrcode{position:absolute;top:0;right:0;width:30px;height:30px;z-index:999;}
+.mod_login .yzt_qrcode .wx{background-repeat:no-repeat; width:30px; height:30px; display:block; background:url(../images/ico.png) no-repeat; }
+
+.loginbox{ width:300px; height:310px;  margin:0px auto; overflow:hidden;}
+.loginbox > span{font-size:18px;height: 50px; line-height: 50px; font-weight: bold}
+.l_form{ width:100%; overflow:hidden;}
+.login_input{ margin:10px 0 20px 0;}
+.login_span span{height: 35px; line-height: 35px; color: #fc6d21}
+.l_input{ width:280px; height:35px; line-height:35px; border:1px #E3E3E3 solid; padding:2px 5px; overflow:hidden;}
+.l_btn{ width:280px; height:35px;border: 0px; padding:2px 5px; background-color:#009688; box-sizing: content-box; overflow:hidden; color:#FFF;}
+
+
+.wxsm{ width:300px; margin:0px auto; overflow:hidden;}
+.wxsm span{font-size:18px;height: 50px; line-height: 50px;}
+.login-tip { position:absolute; top:5px; right:48px;}
+.wxlogo{
+    text-align: center;
+    margin: 50px 0 30px 0;
+}
+.poptip {border:1px solid #14c2dd;height:16px;line-height:16px;padding:5px 20px 5px 15px;background:#e6f9fc;position:relative;}
+.poptip .poptip-content {color:#14c2dd;font-size:12px;font-weight:400;}
+.poptip .poptip-content .iconfont {color:#14c2dd;font-size:14px;margin-right:8px;}
+.poptip-arrow {position:absolute;z-index:10;*zoom:1;}
+.poptip-arrow em,.poptip-arrow span {
+	position:absolute;
+	*zoom:1;
+	width:0;
+	height:0;
+	border-color:rgba(255,255,255,0);
+	border-color:transparent \0;
+	*border-color:transparent;
+	_border-color:#14c2dd;
+	_filter:chroma(color=#14c2dd);
+	border-style:solid;
+	overflow:hidden;
+	top:0;
+	left:0
+}
+.poptip-arrow {
+	top:8px;
+	right:0
+}
+.poptip-arrow em {
+	top:0;
+	left:1px;
+	border-left-color:#14c2dd;
+	border-width:6px 0 6px 6px
+}
+.poptip-arrow span {
+	border-left-color:#e6f9fc;
+	border-width:6px 0 6px 6px
+}
