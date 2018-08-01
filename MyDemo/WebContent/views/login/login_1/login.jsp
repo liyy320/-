@@ -5,19 +5,19 @@
 
 <title>lyy-可配置型管理系统</title>
 
-<link href="css/style.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="js/canvas-particle.js"></script>
+<link href="../../../_urc/jsp/login/login_1/css/style.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="../../../_urc/jsp/login/login_1/js/canvas-particle.js"></script>
 
 </head>
 <body>
 	<!-- 背景div -->
 	<div id="mydiv">
         <div class="mod_login_top">
-            <div class="login_logo"> <img alt="" src="images/logo.png"></div><div class="logo_font"><h2>lyy-可配置型管理系统</h2></div><div class="clear"></div>
+            <div class="login_logo"> <img alt="" src="../../../_urc/jsp/login/login_1/images/logo.png"></div><div class="logo_font"><h2>lyy-可配置型管理系统</h2></div><div class="clear"></div>
         </div>
         <div class="login_box">
             <div class="login_font">
-                <img src="images/img_sm.png">
+                <img src="../../../_urc/jsp/login/login_1/images/img_sm.png">
             </div>
             <div class="login_form">
                 <div class="mod_login">
