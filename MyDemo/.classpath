@@ -26,5 +26,9 @@
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/shiro-all-1.2.3.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.8.0-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/fastjson-1.2.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/fastjson-1.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="WebContent/WEB-INF/lib/log4j-over-slf4j-1.8.0-beta2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

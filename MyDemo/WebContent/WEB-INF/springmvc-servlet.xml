@@ -32,7 +32,7 @@
  
 	<!-- 视图层配置 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/"/>
+		<property name="prefix" value="/views/main/main"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
  
