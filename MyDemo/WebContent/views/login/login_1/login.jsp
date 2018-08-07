@@ -10,6 +10,16 @@
 <script src="/MyDemo/_urc/vue/vue.js"></script>
 <script src="/MyDemo/_urc/jQuery/jquery-1.9.1.js"></script>
 
+<style type="text/css" >
+
+	.fade-enter-active, .fade-leave-active {transition: opacity .5s;}
+
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */{opacity: 0;}
+
+	.login_span P{color:#FF5722;}
+
+</style>
+
 </head>
 <body>
 	<!-- 背景div -->
@@ -26,8 +36,12 @@
                     <div class="loginbox" id="loginbox" >
                         <span>可配置型管理系统登录</span>
                         <div class="l_form">
-                        	<form action ="/MyDemo/a/login" method="post">
-	                            <div class="login_span"><span>{{ message }}</span></div>
+                        	<form>
+                        		
+	                            <div class="login_span">
+		                            <transition name="fade">
+	                        			<p v-if="show">{{ message }}</p>
+	                        		</transition></div>
 	                            <div class="login_input"><input name="username" type="text" class="l_input" v-model="username" /></div>
 	                            <div class="login_input"><input name="password" type="password"  class="l_input" v-model="password" /></div>
 	                            <div class="login_input"><input name="" type="button" class="l_btn" value="登录" v-on:click="loginButton" /></div>
@@ -67,6 +81,10 @@
 	    //调用
 	    CanvasParticle(config);
 	}
+	
+
+	
+
 	</script>
 </body>
 
@@ -79,8 +97,9 @@
 		data : 
 		{
 			message  : '',
-			username : "1",
-			password : ""
+			username : "papio",
+			password : "papio",
+			show : false
 		},
 		created : function(){
 			
@@ -93,26 +112,29 @@
 
 				$.ajax(
 				{
-					url  : "/MyDemo/a/login",
-					type : "POST",
-					data : 
+					url  	 : "/MyDemo/a/login",
+					type 	 : "POST",
+					async 	 : true,
+					dataType : "json",
+					data 	 : {"username" : self.username, "password" : self.password},
+					success  : function(result)
 					{
-						"username" : self.username,
-						"password" : self.password
-					},
-					success : function(result)
-					{
-						alert(result);
-// 						self.message = self.username;
 						
-					}
-					
-					
+						if(result.status == "1"){self.message = result.message;self.show = true;}
+
+						if(result.status == "0")
+						{
+							self.show = false;
+							$(window).attr('location','/MyDemo/views/main/main.jsp');
+						}
+						
+					},
+					error : function(res){}
 				})
 			}
 		}
 	})
-
+	
 </script>
 
 </html>

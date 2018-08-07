@@ -33,10 +33,10 @@ public class LoginController extends BaseController
 	{
 
 		Map<String, Object> returnData = new HashMap<String, Object>();
-		
+
         String username = request.getParameter("username");  
         String password = request.getParameter("password");  
- 
+
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 
         token.setRememberMe(true);
@@ -49,7 +49,10 @@ public class LoginController extends BaseController
             //在调用了login方法后,SecurityManager会收到AuthenticationToken,并将其发送给已配置的Realm执行必须的认证检查  
             //每个Realm都能在必要时对提交的AuthenticationTokens作出反应  
             //所以这一步在调用login(token)方法时,它会走到MyRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法  
-            currentUser.login(token); 
+            currentUser.login(token);
+
+        	returnData.put("status", "0");
+            returnData.put("message", "登录成功");
 
         }
         catch(UnknownAccountException uae)
@@ -79,18 +82,18 @@ public class LoginController extends BaseController
             returnData.put("message", "用户名或密码不正确");
         }
 
-        //验证是否登录成功  
-        if(currentUser.isAuthenticated())
-        {
-        	//通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
-        	returnData.put("status", "0");
-            returnData.put("message", "登录成功");
-        }
-        else
-        {  
-            token.clear();  
-        } 
- 
+//        //验证是否登录成功  
+//        if(currentUser.isAuthenticated())
+//        {
+//        	//通过处理Shiro的运行时AuthenticationException就可以控制用户登录失败或密码错误时的情景  
+////        	returnData.put("status", "0");
+////            returnData.put("message", "登录成功");
+//        }
+//        else
+//        {  
+//            token.clear();  
+//        } 
+
         return renderString(response, returnData);
 	}
 	

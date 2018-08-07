@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
+
 /**
  * Controller父类
  * 
@@ -20,7 +22,7 @@ public class BaseController
 	 */
 	protected String renderString(HttpServletResponse response, Object object) 
 	{
-		return renderString(response, String.valueOf(object), "application/json");
+		return renderString(response, JSON.toJSONString(object), "application/json");
 	}
 	
 	/**
@@ -37,7 +39,7 @@ public class BaseController
 			response.reset();
 			response.setContentType(type);
 			response.setCharacterEncoding("utf-8");
-//			response.addHeader("Access-Control-Allow-Origin", "*"); //处理跨域时使用
+			response.addHeader("Access-Control-Allow-Origin", "*"); //处理跨域时使用
 			response.getWriter().print(string);
 
 			return null;

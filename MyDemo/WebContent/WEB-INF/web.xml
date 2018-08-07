@@ -63,15 +63,11 @@
 	<!-- 静态资源的访问 -->
 	<servlet-mapping>
 	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.css</url-pattern>
+	    <url-pattern>/_urc/*</url-pattern>
   	</servlet-mapping>
   	<servlet-mapping>
 	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.js</url-pattern>
-  	</servlet-mapping>
-  	<servlet-mapping>
-	    <servlet-name>default</servlet-name>
-	    <url-pattern>*.png</url-pattern>
+	    <url-pattern>/views/main/lib/*</url-pattern>
   	</servlet-mapping>
 
   <welcome-file-list>
