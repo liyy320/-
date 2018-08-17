@@ -20,25 +20,33 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
     };
 
     //渲染HTML
-    Desktop.prototype.render = function (callback) {
+    Desktop.prototype.render = function (callback)
+    {
         if (this.data === null) return;
+
         var html = '';
-        $(this.data).each(function (index, item) {
-            var id = (item.id == '' || item.id == undefined) ? '' : 'win-id="' + item.id + '"',
-                url = (item.pageURL == '' || item.pageURL == undefined) ? '' : 'win-url="' + item.pageURL + '"',
-                title = (item.title == '' || item.title == undefined) ? '' : 'win-title="' + item.title + '"',
+
+        $(this.data).each(function (index, item)
+        {
+            var id       = (item.id       == '' || item.id       == undefined) ? '' : 'win-id="'       + item.id + '"',
+                url      = (item.pageURL  == '' || item.pageURL  == undefined) ? '' : 'win-url="'      + item.pageURL + '"',
+                title    = (item.title    == '' || item.title    == undefined) ? '' : 'win-title="'    + item.title + '"',
                 opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
-                maxOpen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxOpen="' + item.maxOpen + '"',
+                maxOpen  = (item.maxOpen  == '' || item.maxOpen  == undefined) ? '' : 'win-maxOpen="'  + item.maxOpen + '"',
+                width	 = (item.width    == '' || item.width    == undefined) ? '' : 'win-width="'    + item.width + '"',
+                height	 = (item.height   == '' || item.height   == undefined) ? '' : 'win-height="'   + item.height + '"',	 
                 //icon的算法存在纰漏，但出现错误几率较小
                 isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1),
-                icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
-            html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
+                icon     = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+
+            html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + width + ' ' + height +'>';
             html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
             html += icon;
             html += '</div>';
             html += '<p>' + item.name + '</p>';
             html += '</div>';
         });
+
         $('.winui-desktop').html(html);
         //定位应用
         common.locaApp();

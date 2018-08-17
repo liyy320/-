@@ -22,7 +22,9 @@
       "maxOpen": -1,
       "extend": false,
       "childs": null,
-      "id": 4
+      "id": 4,
+      "width":"70vw",
+      "height" : "80vh"
     },
     {
       "title": "系统菜单",
@@ -33,7 +35,9 @@
       "maxOpen": -1,
       "extend": false,
       "childs": null,
-      "id": 2
+      "id": 2,
+      "width":"70vw",
+      "height" : "80vh"
     },
     {
       "title": "角色管理",
@@ -44,7 +48,9 @@
       "maxOpen": -1,
       "extend": false,
       "childs": null,
-      "id": 22
+      "id": 22,
+      "width":"70vw",
+      "height" : "80vh"
     },
     {
       "title": "ECharts",
@@ -54,7 +60,22 @@
       "openType": 2,
       "extend": false,
       "childs": null,
-      "id": 58
+      "id": 58,
+      "width":"70vw",
+      "height" : "80vh"
+    },
+    {
+      "title": "微信",
+	  "pageURL": "/MyDemo/views/Tencent/WX/main.jsp",
+      "name": "微信",
+      "icon": "fa-bar-chart",
+      "openType": 2,
+      "maxOpen": -1,
+      "extend": false,
+      "childs": null,
+      "id" : 59,
+      "width":"70vw",
+      "height" : "80vh"
     }
   ]
 }

@@ -115,35 +115,41 @@
     });
 
     //打开窗口的方法（可自己根据需求来写）
-    function OpenWindow(menuItem) {
+    function OpenWindow(menuItem) 
+    {
+
         var $this = $(menuItem);
 
-        var url = $this.attr('win-url');
-        var title = $this.attr('win-title');
-        var id = $this.attr('win-id');
-        var type = parseInt($this.attr('win-opentype'));
+        var url     = $this.attr('win-url');
+        var title   = $this.attr('win-title');
+        var id      = $this.attr('win-id');
+        var type    = parseInt($this.attr('win-opentype'));
+        var width   = $this.attr('win-width');
+        var height  = $this.attr('win-height');
         var maxOpen = parseInt($this.attr('win-maxopen')) || -1;
-        if (url == 'theme') {
-            winui.window.openTheme();
-            return;
-        }
-        if (!url || !title || !id) {
-            winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
-            return;
-        }
+
+        if (url == 'theme') {winui.window.openTheme(); return; }
+
+        if (!url || !title || !id) {winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）'); return;}
 
         var content;
-        if (type === 1) {
-            $.ajax({
+
+        if (type === 1) 
+        {
+            $.ajax(
+            {
                 type: 'get',
                 url: url,
                 async: false,
-                success: function (data) {
+                success: function (data)
+                {
                     content = data;
                 },
-                error: function (e) {
+                error: function (e) 
+                {
                     var page = '';
-                    switch (e.status) {
+                    switch (e.status)
+                    {
                         case 404:
                             page = '404.html';
                             break;
@@ -153,37 +159,42 @@
                         default:
                             content = "打开窗口失败";
                     }
-                    $.ajax({
+
+                    $.ajax(
+                    {
                         type: 'get',
                         url: 'views/error/' + page,
                         async: false,
-                        success: function (data) {
+                        success: function (data)
+                        {
                             content = data;
                         },
-                        error: function () {
+                        error: function ()
+                        {
                             layer.close(load);
                         }
                     });
                 }
             });
-        } else {
-            content = url;
-        }
+        } 
+        else { content = url;}
         //核心方法（参数请看文档，config是全局配置 open是本次窗口配置 open优先级大于config）
-        winui.window.config({
+        winui.window.config(
+        {
             anim: 0,
             miniAnim: 0,
-            maxOpen: -1
-        }).open({
+            maxOpen: -1,
+        }).open(
+        {
             id: id,
             type: type,
             title: title,
-            content: content
-            //,area: ['70vw','80vh']
+            content: content,
+            area : [width, height],
             //,offset: ['10vh', '15vw']
-            , maxOpen: maxOpen
-            //, max: false
-            //, min: false
+            maxOpen: maxOpen,
+            max: false
+//            , min: false
             //, refresh:true
         });
     }
