@@ -11,15 +11,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,6 +110,13 @@ public class Proxy extends HttpServlet
 		String result = "";
 
 		String url = request.getParameter("url");
+		
+		Cookie[] cookies = request.getCookies();
+		
+		for(Cookie c : cookies)
+		{
+			System.out.println(c.getName() + ":" + c.getValue());
+		}
 
         String BaseRequest = request.getParameter("BaseRequest");
         

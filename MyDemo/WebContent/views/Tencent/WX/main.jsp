@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>微信</title>
-
+<link href="/MyDemo/_urc/css/Tencent/WX/b57ceb1fe70efc47d4f0cab10d89d36f.css" rel="stylesheet" />
 <link href="/MyDemo/_urc/lib/layui/css/layui.css" rel="stylesheet" />
 <script src="/MyDemo/_urc/vue/vue.js"></script>
 <script src="/MyDemo/_urc/jQuery/jquery-1.9.1.js"></script>
@@ -36,6 +36,7 @@
 	margin-top:20px;
 }
 #left div{margin-top:20px;}
+
 #center
 {
 	height:576px;
@@ -56,16 +57,42 @@
 {
 	height:60px;
 	color:#393D49;
+	position: relative;
 }
-
+.contactTime
+{
+	right: 0px;
+    margin-top: 14px;
+    position: absolute;
+    margin-right: 10px;
+}	
+.contactMsg
+{
+	margin-left: 64px;
+    position: absolute;
+    bottom: 10px;
+}
+	
 #center_bottom li img
 {
 	width:40px;
 	height:40px;
 	margin-top:10px;
 	margin-left:10px;
+	float: left;
 	
 }
+
+#center_bottom li .emoji
+{
+	margin:0px 2px 0px 2px
+}
+
+#right_top .emoji
+{
+	margin:4px 2px 0px 2px
+}
+
 #right
 {
 	width:750px;
@@ -116,6 +143,9 @@
     bottom: 10px;
     border: 1px solid #d2d2d2;
 }
+.flip-list-move {
+  transition: transform 1s;
+}
 </style>
 </head>
 	<body>
@@ -138,11 +168,19 @@
 					<div id="center_top">
 						<input type="text" name="search" placeholder="搜索" class="layui-input" style="width:200px;height:25px;margin-left:10px;margin-top:27px;">
 					</div>
-					<div id="center_bottom"><ul></ul></div>
-					
+					<div id="center_bottom">
+						<transition-group name="flip-list" tag="ul">
+							<li v-for="list in ContactList" @click="clickli($event, list)"  v-bind:key="list.UserName">
+								<img src="/MyDemo/_urc/images/WX/TX.png"/>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.NickName"></span>
+								<span class="contactTime">10:51</span>
+								<span class="contactMsg" v-html="list.Msg"></span>
+							</li>
+  						</transition-group>
+					</div>
 				</div>
 				<div id="right">
-					<div id="right_top"><span>{{selectinfo.NickName}}</span></div><hr>
+					<div id="right_top"><span v-html="selectinfo.NickName"></span></div><hr>
 					<div id="right_center"></div>
 					<div id="right_bottom"><hr>
 						<div id="tools">
@@ -171,13 +209,16 @@
 			wxsid : "",
 			skey : "",
 			selectli : "",
+			wxpluginkey : "",
 			selectinfo : 
 			{
-				NickName : ""
+				NickName : "",
+				UserName : ""
 			},
 			UserInfo : {},
 			ContactList:[],
-			SyncCheckKey:{}
+			SyncCheckKey:{},
+			MemberList : []
 
 			
 		},
@@ -300,8 +341,7 @@
 						 
 						 $("#right_bottom textarea").focus(function(){$("#right_bottom").css("background","#FFFFFF");$("#right_bottom textarea").css("background","#FFFFFF")});
 						 $("#right_bottom textarea").blur(function(){$("#right_bottom").css("background","#f2f2f2");$("#right_bottom textarea").css("background","#f2f2f2")});
-						 $("#right_bottom button").click(function(){webwxsendmsg();})
-						 
+						 $("#right_bottom button").click(function(){self.webwxsendmsg();})
 						 
 						 var returnDataXml = self.parseXML(result)
 	
@@ -378,50 +418,56 @@
 			{
 				var self = this;
 				var html = "";
-				for(var i=0;i<self.ContactList.length;i++)
-				{
-					var src = "";
+				
+// 				for(var i=0;i<self.ContactList.length;i++)
+// 				{
+// 					var src = "";
 
-					if(self.ContactList[i].KeyWord != "" && self.ContactList[i].KeyWord != "gh_")
-					{
-						src = "/MyDemo/_urc/images/WX/" + self.ContactList[i].KeyWord + ".jpg";
-					}
-					else if(self.ContactList[i].MemberCount > 0)
-					{
-						src = "/MyDemo/_urc/images/WX/QZ.png";
-					}
-					else
-					{
-						src = "/MyDemo/_urc/images/WX/TX.png";
-					}
+// 					if(self.ContactList[i].KeyWord != "" && self.ContactList[i].KeyWord != "gh_")
+// 					{
+// 						src = "/MyDemo/_urc/images/WX/" + self.ContactList[i].KeyWord + ".jpg";
+// 					}
+// 					else if(self.ContactList[i].MemberCount > 0)
+// 					{
+// 						src = "/MyDemo/_urc/images/WX/QZ.png";
+// 					}
+// 					else
+// 					{
+// 						src = "/MyDemo/_urc/images/WX/TX.png";
+// 					}
 					
-					html = "<li membercount='" + self.ContactList[i].MemberCount + "'><a><img src=\"" + src + "\"/><span style=\"margin-left:10px;\"> " + self.ContactList[i].NickName.replace("�?", "").replace("�? ","").replace("�?","").replace("�?","") + "</span></a></li>";
+// 					html = "<li membercount='" + self.ContactList[i].MemberCount + "' username='" + self.ContactList[i].UserName + "'><a><img src=\"" + src + "\"/><span style=\"margin-left:10px;\"> " + self.ContactList[i].NickName.replace("�?", "").replace("�? ","").replace("�?","").replace("�?","") + "</span></a></li>";
 
-					$("#center_bottom ul").append(html);
-				}
+// 					$("#center_bottom ul").append(html);
+// 				}
 
-				$("#center_bottom li").bind("click", function(){self.clickli(this)});
+// 				$("#center_bottom li").bind("click", function(){self.clickli(this)});
 				
 				self.webwxgetcontact();
 				
 			},
-			clickli : function(e)
+			clickli : function(event, index)
 			{
 				var self = this;
-
 				
-				console.log($(e));
-				var membercount = $(e)[0].attributes[0].value;
+				console.log(event);
+				
+				var e;
+				
+				if(event.path[0].localName == 'span'){e = $(event.path[1]);}else{e = $(event.path[0]);}
 				
 				if(self.selectli != ""){$(self.selectli).css("background","#f2f2f2");}
 				
-				$(e).css("background","#d2d2d2");
+				e.css("background","#d2d2d2");
 				
 				self.selectli = e;
 
-				self.selectinfo.NickName = $(e).find("span")[0].innerText;
+				self.selectinfo.NickName = index.NickName;
+				self.selectinfo.UserName = index.UserName;
 				
-				if(membercount != "0"){self.selectinfo.NickName += "("+ membercount +")"}
+				console.log(self.selectinfo)
+
+				if(index.MemberCount != "0"){self.selectinfo.NickName += "("+ index.MemberCount +")"}
 				
 			},
 			webwxgetcontact : function()
@@ -443,11 +489,90 @@
 					success  : function(result)
 					{
 						console.log(result)
+						
+						self.MemberList = result.MemberList;
+						
 						self.synccheck();
+						
+						self.webwxsync
 						 
 					},
 					error : function(res){console.log(res)}
 				})
+			},
+			webwxsync : function()
+			{
+				var self = this;
+				
+				var BaseRequest  = "{BaseRequest:{Uin:\"" + self.wxuin + "\",Sid:\"" + self.wxsid + "\",Skey:\"" + self.skey + "\",DeviceID:\"e" + ("" + Math.random().toFixed(15)).substring(2, 17) +"\"},";
+					BaseRequest += "SyncKey: " + JSON.stringify(self.SyncCheckKey) + ",rr:\"" + (-new Date().getTime() / 1000) + "\"}";
+
+					$.ajax(
+					{
+						type   : "POST",
+						url  	 : "/MyDemo/proxy/doPostRequestPayload",
+						dataType : "json",
+						data 	 :
+						{
+							"url"  : "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=" + self.wxsid + "&skey=" + self.skey + "&uin=" + self.wxuin + "&pass_ticket=" + self.pass_ticket,
+							"BaseRequest" : BaseRequest
+						},
+						success  : function(result)
+						{
+							console.log(result)
+							
+							self.SyncCheckKey = result.SyncKey;
+							
+							console.log(self.SyncCheckKey);
+							
+							for(var i = 0;i<result.AddMsgCount;i++)
+							{
+								
+								var no = true;
+								
+								var list = {};
+								
+								for(var j = 0;j < self.ContactList.length;j++)
+								{
+									if(result.AddMsgList[i].FromUserName == self.ContactList[j].UserName)
+									{
+										list = self.ContactList[j];
+										
+										self.ContactList.splice(j+1, 1);
+										
+										no = false;break;
+									}
+								}
+								
+								if(no)
+								{
+									for(var j = 0;j < self.MemberList.length;j++)
+									{
+										if(result.AddMsgList[i].FromUserName == self.MemberList[j].UserName)
+										{
+											list = self.MemberList[j];break;
+										}
+									}
+								}
+								
+								if(result.AddMsgList[i].MsgType == "1")
+								{
+									list["Msg"] = result.AddMsgList[i].Content;
+									
+								}else
+								{
+									list["Msg"] = "[此消息暂不支持]";
+								}
+								
+								self.ContactList.splice(0, 0, list);
+							}
+							
+							self.synccheck();
+							
+						},
+						error : function(res){console.log(res)}
+					})
+				
 			},
 			synccheck : function()
 			{
@@ -462,18 +587,59 @@
 					dataType : "script",
 					data 	 :
 					{
-						"url"  : "https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?uin=" + self.UserInfo.Uin + "&r=" + (+new Date) + "&skey=" + self.skey + "&sid=" + self.wxsid + "&deviceid=e" + ("" + Math.random().toFixed(15)).substring(2, 17) + "&synckey=" + self.getFormateSyncCheckKey() + "&_=" + (new Date()).getTime(),
+						"url"  : "https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?uin=" + self.UserInfo.Uin + "&r=" + (+new Date) + "&skey=" + self.skey + "&sid=" + self.wxsid + "&deviceid=e" + ("" + Math.random().toFixed(15)).substring(2, 17) + "&synckey=" + self.getFormateSyncCheckKey() + "&&pass_ticket=" + self.pass_ticket + "&_=" + (new Date()).getTime(),
 						"BaseRequest" : BaseRequest
 					},
 					success  : function(result)
 					{
 						var synccheck = eval("(" + result.split("=")[1] + ")");
 
-// 						if(synccheck.retcode != "0"){self.synccheck();}
-						 
+						if(synccheck.selector == "2"){self.webwxsync();}else{self.synccheck();}
+						
 					},
 					error : function(res){console.log(res)}
 				})
+			},
+			webwxsendmsg : function()
+			{
+				var self = this;
+				
+				var msg = $("#right_bottom textarea").val();
+				
+				var ClientMsgId = ((new Date()).getTime() + Math.random().toFixed(3)).replace(".", "");
+				
+				var BaseRequest  = "{BaseRequest:{Uin:\"" + self.wxuin + "\",Sid:\"" + self.wxsid + "\",Skey:\"" + self.skey + "\",DeviceID:\"e" + ("" + Math.random().toFixed(15)).substring(2, 17) +"\"},";
+					BaseRequest += "Msg:{ClientMsgId:\"" + ClientMsgId + "\",";
+					BaseRequest += "Content:\"" + msg + "\",";
+					BaseRequest += "FromUserName:\"" + self.UserInfo.UserName + "\",";
+					BaseRequest += "LocalID:\"" + ClientMsgId + "\",";
+					BaseRequest += "Type:\"1\",";
+					BaseRequest += "ToUserName:\"" + self.selectinfo.UserName + "\"},";
+					BaseRequest += "Scene:\"0\"}";
+					
+					$.ajax(
+					{
+						type   : "POST",
+						url  	 : "/MyDemo/proxy/doPostRequestPayload",
+						dataType : "script",
+						data 	 :
+						{
+							"url"  : "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg?lang=zh_CN",
+							"BaseRequest" : BaseRequest
+						},
+						success  : function(result)
+						{
+							
+							console.log(result)
+							
+							var synccheck = eval("(" + result.split("=")[1] + ")");
+
+// 	 						if(synccheck.retcode != "0"){self.synccheck();}
+							 
+						},
+						error : function(res){console.log(res)}
+					})
+				
 			},
 			getFormateSyncCheckKey : function()
 			{
@@ -484,6 +650,11 @@
 				for(var i=0;i<self.SyncCheckKey.List.length;i++)
 				{
 					synckey.push(self.SyncCheckKey.List[i].Key + "_" + self.SyncCheckKey.List[i].Val);
+					
+					if(self.SyncCheckKey.List[i].Key == "1000")
+					{
+						self.wxpluginkey = self.SyncCheckKey.List[i].Val;
+					}
 				}
 				
 				return synckey.join("|");
