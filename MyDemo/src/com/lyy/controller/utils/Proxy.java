@@ -41,7 +41,18 @@ public class Proxy extends HttpServlet
 
         String url = request.getParameter("url");
         
+        String ContentType = request.getParameter("ContentType");
+        
         response.setContentType("text/html;charset=UTF-8");
+        
+        Cookie[] cookies = request.getCookies();
+		
+		for(Cookie c : cookies)
+		{
+			System.out.println(c.getName() + ":" + c.getValue());
+		}
+        
+        if(ContentType != null) {response.setContentType(ContentType);}
         
         StringBuffer param = new StringBuffer();
 

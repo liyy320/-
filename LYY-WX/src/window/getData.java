@@ -9,10 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import Utils.HttpUtils;
 import Utils.ScriptUtils;
+import bean.AddMsgBean;
+import bean.ChatJPanelBean;
 import bean.ContactBean;
+import bean.ContatInfoBean;
+import bean.LoginInfoBean;
 import bean.UserInfoBean;
 
 public class getData
@@ -20,9 +25,13 @@ public class getData
 
 	private int tip = 1;
 	//登陆信息
-	private Map<String, Object> loginInfo = new HashMap<String, Object>();
-	public UserInfoBean userinfo = new UserInfoBean();
-	public List<ContactBean> ContactList = new ArrayList<ContactBean>();
+	private LoginInfoBean loginInfo = new LoginInfoBean(); 					//登录信息
+	private UserInfoBean userinfo = new UserInfoBean();						//登录用户信息
+	private ContatInfoBean contatInfo = new ContatInfoBean();
+	private ContactBean contactDataClick = null;							//当前选中的聊天的联系人的信息
+	private ChatJPanelBean chatJPanel = new ChatJPanelBean();				//聊天界面的对象
+	private Map<String, Object> SyncKey = null;								//获取最新消息时用到
+	private List<AddMsgBean> AddMsgList = null;								//最新消息列表
 	
 	/**
 	 * 获取登陆二维码时用的随机码
@@ -115,12 +124,12 @@ public class getData
 	{
 		StringBuffer sb = HttpUtils.doGet(url + "&fun=new&version=v2");
 		
-		loginInfo.put("skey", sb.toString().split("skey>")[1].replaceAll("</", ""));
-		loginInfo.put("wxsid", sb.toString().split("wxsid>")[1].replaceAll("</", ""));
-		loginInfo.put("wxuin", sb.toString().split("wxuin>")[1].replaceAll("</", ""));
-		loginInfo.put("pass_ticket", sb.toString().split("pass_ticket>")[1].replaceAll("</", ""));
-		loginInfo.put("isgrayscale", sb.toString().split("isgrayscale>")[1].replaceAll("</", ""));
-		
+		loginInfo.setSkey(sb.toString().split("skey>")[1].replaceAll("</", ""));
+		loginInfo.setWxsid(sb.toString().split("wxsid>")[1].replaceAll("</", ""));
+		loginInfo.setWxuin(sb.toString().split("wxuin>")[1].replaceAll("</", ""));
+		loginInfo.setPass_ticket(sb.toString().split("pass_ticket>")[1].replaceAll("</", ""));
+		loginInfo.setIsgrayscale(sb.toString().split("isgrayscale>")[1].replaceAll("</", ""));
+
 	}
 
 	public StringBuffer webwxinit()
@@ -129,14 +138,14 @@ public class getData
 		Map<String, Object> params = new HashMap<String, Object>();
 		
 		params.put("r", ScriptUtils.getR());
-		params.put("pass_ticket", loginInfo.get("pass_ticket"));
+		params.put("pass_ticket", loginInfo.getPass_ticket());
 		
 		StringBuffer baserequest = new StringBuffer("{");
 
 		baserequest.append("\"BaseRequest\":{");
-		baserequest.append("\"Uin\":\"" + loginInfo.get("wxuin") + "\",");
-		baserequest.append("\"Sid\":\"" + loginInfo.get("wxsid") + "\",");
-		baserequest.append("\"Skey\":\"" + loginInfo.get("skey") + "\",");
+		baserequest.append("\"Uin\":\"" + loginInfo.getWxuin() + "\",");
+		baserequest.append("\"Sid\":\"" + loginInfo.getWxsid() + "\",");
+		baserequest.append("\"Skey\":\"" + loginInfo.getSkey() + "\",");
 		baserequest.append("\"DeviceID\":\"" + ScriptUtils.getDeviceID() + "\"}");
 		baserequest.append("}");
 
@@ -145,11 +154,128 @@ public class getData
 		return sb;
 	}
 	
+	public StringBuffer webwxstatusnotify()
+	{
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("r", ScriptUtils.getR());
+		params.put("pass_ticket", loginInfo.getPass_ticket());
+		
+		StringBuffer baserequest = new StringBuffer("{");
+
+		baserequest.append("\"BaseRequest\":{");
+		baserequest.append("\"Uin\":\"" + loginInfo.getWxuin() + "\",");
+		baserequest.append("\"Sid\":\"" + loginInfo.getWxsid() + "\",");
+		baserequest.append("\"Skey\":\"" + loginInfo.getSkey() + "\",");
+		baserequest.append("\"DeviceID\":\"" + ScriptUtils.getDeviceID() + "\"},");
+		baserequest.append("\"ClientMsgId\":\"" + (new Date()).getTime() + "\",");
+		baserequest.append("\"Code\":\"3\",");
+		baserequest.append("\"FromUserName\":\"" + this.userinfo.getUserName() + "\",");
+		baserequest.append("\"ToUserName\":\"" + this.userinfo.getUserName() + "\"");
+		baserequest.append("}");
+		
+		StringBuffer sb = HttpUtils.doPostRequestPayload("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify", params, baserequest.toString());
+		
+		
+		return sb;
+	}
+	
+	public Map<String, Object> synccheck()
+	{
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("sid",  loginInfo.getWxsid());
+		params.put("skey", loginInfo.getSkey());
+		params.put("uin",  loginInfo.getWxuin());
+		params.put("r", ScriptUtils.getR());
+		params.put("pass_ticket", loginInfo.getPass_ticket());
+		params.put("synckey", synckeyFormat());
+		params.put("deviceid", ScriptUtils.getDeviceID());
+		params.put("_", (new Date()).getTime());
+		
+		StringBuffer baserequest = new StringBuffer("{");
+
+		baserequest.append("\"BaseRequest\":{");
+		baserequest.append("\"Uin\":\"" + loginInfo.getWxuin() + "\",");
+		baserequest.append("\"Sid\":\"" + loginInfo.getWxsid() + "\",");
+		baserequest.append("\"Skey\":\"" + loginInfo.getSkey() + "\",");
+		baserequest.append("\"DeviceID\":\"" + ScriptUtils.getDeviceID() + "\"}");
+		baserequest.append("}");
+		
+		StringBuffer sb = HttpUtils.doPostRequestPayload("https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck", params, baserequest.toString());
+		
+		String [] syncchecks = sb.toString().split("=");
+		String synccheck = syncchecks[1].substring(1, syncchecks[1].length() - 1);
+		
+		result.put("retcode", synccheck.split(",")[0].split(":")[1].replaceAll("\"", ""));
+		result.put("selector", synccheck.split(",")[1].split(":")[1].replaceAll("\"", ""));
+		
+		return result;
+	}
+	
+	public String synckeyFormat()
+	{
+		StringBuffer result = new StringBuffer();
+		
+		boolean isFirst = true;
+		for(Map.Entry<String, Object> entry : this.SyncKey.entrySet())
+		{
+			if(!isFirst) {result.append("|");}
+			
+			result.append(entry.getKey() + "_" + entry.getValue());
+			
+			isFirst = false;
+		}
+		
+		return result.toString();
+	}
+	
+	public StringBuffer webwxsync()
+	{
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("sid",  loginInfo.getWxsid());
+		params.put("skey", loginInfo.getSkey());
+		params.put("uin",  loginInfo.getWxuin());
+		params.put("pass_ticket", loginInfo.getPass_ticket());
+		
+		StringBuffer baserequest = new StringBuffer("{");
+
+		baserequest.append("\"BaseRequest\":{");
+		baserequest.append("\"Uin\":\"" + loginInfo.getWxuin() + "\",");
+		baserequest.append("\"Sid\":\"" + loginInfo.getWxsid() + "\",");
+		baserequest.append("\"Skey\":\"" + loginInfo.getSkey() + "\",");
+		baserequest.append("\"DeviceID\":\"" + ScriptUtils.getDeviceID() + "\"},");
+		baserequest.append("\"SyncKey\":{\"Count\":\"" + this.SyncKey.size() + "\",\"List\":[");
+		
+		boolean isFirst = true;
+		for(Map.Entry<String, Object> entry : this.SyncKey.entrySet())
+		{
+			if(!isFirst) {baserequest.append(",");}
+
+			baserequest.append("{\"Key\":\"" + entry.getKey() + "\", \"Val\": \"" + entry.getValue() + "\"}");
+			
+			isFirst = false;
+		}
+
+		baserequest.append("]},");
+		baserequest.append("\"rr\":\"" + ScriptUtils.getRR() + "\"");
+		baserequest.append("}");
+		
+		StringBuffer sb = HttpUtils.doPostRequestPayload("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync", params, baserequest.toString());
+		
+		
+		return sb;
+		
+	}
+	
 	public Image getimg(String url)
 	{
 
 		Image image = null;
-		
+
 		try 
 		{
 			image = ImageIO.read(new URL("https://wx.qq.com" + url));
@@ -161,4 +287,55 @@ public class getData
 		
 		return image;
 	}
+
+	
+	/********************************************************************************/
+	public UserInfoBean getUserinfo() {
+		return userinfo;
+	}
+
+	public void setUserinfo(UserInfoBean userinfo) {
+		this.userinfo = userinfo;
+	}
+
+	public ContactBean getContactDataClick() {
+		return contactDataClick;
+	}
+
+	public void setContactDataClick(ContactBean contactDataClick) {
+		this.contactDataClick = contactDataClick;
+	}
+
+	public ChatJPanelBean getChatJPanel() {
+		return chatJPanel;
+	}
+
+	public void setChatJPanel(ChatJPanelBean chatJPanel) {
+		this.chatJPanel = chatJPanel;
+	}
+
+	public Map<String, Object> getSyncKey() {
+		return SyncKey;
+	}
+
+	public void setSyncKey(Map<String, Object> syncKey) {
+		SyncKey = syncKey;
+	}
+
+	public List<AddMsgBean> getAddMsgList() {
+		return AddMsgList;
+	}
+
+	public void setAddMsgList(List<AddMsgBean> addMsgList) {
+		AddMsgList = addMsgList;
+	}
+
+	public ContatInfoBean getContatInfo() {
+		return contatInfo;
+	}
+
+	public void setContatInfo(ContatInfoBean contatInfo) {
+		this.contatInfo = contatInfo;
+	}
+	
 }

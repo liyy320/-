@@ -7,7 +7,7 @@
 <link href="/MyDemo/_urc/lib/layui/css/layui.css" rel="stylesheet" />
 <script src="/MyDemo/_urc/vue/vue.js"></script>
 <script src="/MyDemo/_urc/jQuery/jquery-1.9.1.js"></script>
-<script src="/MyDemo/_urc/lib/layui/layui.js"></script>
+<script src="/MyDemo/_urc/lib/layui/layui.all.js"></script>
 <script src="/MyDemo/_urc/jQuery/jquery.cookie.js"></script>
 <style>
 
@@ -42,6 +42,7 @@
 	height:576px;
 	width:300px;
 	float:left;
+	overflow:hidden;
 }
 #center_top
 {
@@ -65,12 +66,20 @@
     margin-top: 14px;
     position: absolute;
     margin-right: 10px;
+    font-size: 10px;
 }	
 .contactMsg
 {
-	margin-left: 64px;
+	margin-left: 60px;
     position: absolute;
     bottom: 10px;
+    left: 0px;
+    display: block;
+    width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
 }
 	
 #center_bottom li img
@@ -116,7 +125,18 @@
 #right_center
 {
 	height:300px;
-	width:576px;
+	width:750px;
+	overflow: auto;
+}
+#right_center img
+{
+    width: 30px;
+    height: 30px;
+}
+#right_center li
+{
+	width: 735px;
+	margin-bottom: 10px;
 }
 #right_bottom
 {
@@ -146,6 +166,69 @@
 .flip-list-move {
   transition: transform 1s;
 }
+
+/**气泡样式*/
+.othertext
+{
+	 position: relative;
+     left:20px;
+     background: #ffffff;
+     -moz-border-radius: 12px;
+     -webkit-border-radius: 12px;
+     border-radius: 12px;
+     margin-right: 273px;
+     width: auto;
+    display: inline-block;
+}
+.othertext:before
+{
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	right: 100%;
+	top: 10px;
+	border-top: 5px solid transparent;
+	border-right: 10px solid #ffffff;
+	border-bottom: 5px solid transparent;
+}
+
+.owntext
+{
+	 position: relative;
+     right:20px;
+     background: #5FB878;
+     -moz-border-radius: 12px;
+     -webkit-border-radius: 12px;
+     border-radius: 12px;
+     margin-left: 273px;
+     width: auto;
+    display: inline-block;
+    float: right;
+}
+.owntext:after
+{
+	position: absolute;
+	content: "";
+	width: 0;
+	height: 0;
+	top: 10px;
+	border-top: 5px solid transparent;
+	border-left: 10px solid #5FB878;
+	border-bottom: 5px solid transparent;
+}
+
+.context
+{
+    width: 619px;
+}
+.contextspan
+{
+	display: inline-block;
+    margin: 10px;
+    max-width: 400px;
+    word-wrap: break-word;
+}	
 </style>
 </head>
 	<body>
@@ -161,33 +244,72 @@
 			<div id="main_div">
 				<div id="left" class="layui-bg-black">
 					<img src="/MyDemo/_urc/images/WX/TX.png"/>
-					<div><i class="layui-icon" style="font-size: 25px;">&#xe611;</i></div>
-					<div><i class="layui-icon" style="font-size: 25px;">&#xe770;</i></div>
+					<div @click="modeclick($event, 0)"><i class="layui-icon" style="font-size: 25px;">&#xe611;</i></div>
+					<div @click="modeclick($event, 1)"><i class="layui-icon" style="font-size: 25px;">&#xe612;</i></div>
+					<div @click="modeclick($event, 2)"><i class="layui-icon" style="font-size: 25px;">&#xe613;</i></div>
+					<div @click="modeclick($event, 3)"><i class="layui-icon" style="font-size: 25px;">&#xe631;</i></div>
 				</div>
 				<div id="center" class="layui-bg-gray">
 					<div id="center_top">
 						<input type="text" name="search" placeholder="搜索" class="layui-input" style="width:200px;height:25px;margin-left:10px;margin-top:27px;">
 					</div>
-					<div id="center_bottom">
+					<div id="center_bottom" class="center_bottom_0">
 						<transition-group name="flip-list" tag="ul">
 							<li v-for="list in ContactList" @click="clickli($event, list)"  v-bind:key="list.UserName">
+								<img :src="list.Img"/>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.NickName" v-if="list.RemarkName == ''"></span>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.RemarkName" v-else></span>
+								<span class="contactTime">{{list.newTime}}</span></br>
+								<span class="contactMsg" v-html="list.newMsg"></span>
+							</li>
+  						</transition-group>
+					</div>
+					<div id="center_bottom" class="center_bottom_1">
+						<transition-group name="flip-list" tag="ul">
+							<li v-for="list in MemberList" @click="clickli($event, list)"  v-bind:key="list.UserName">
 								<img src="/MyDemo/_urc/images/WX/TX.png"/>
-								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.NickName"></span>
-								<span class="contactTime">10:51</span>
-								<span class="contactMsg" v-html="list.Msg"></span>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.NickName" v-if="list.RemarkName == ''"></span>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.RemarkName" v-else></span>
+							</li>
+  						</transition-group>
+					</div>
+					<div id="center_bottom" class="center_bottom_2">
+						<transition-group name="flip-list" tag="ul">
+							<li v-for="list in BatchGetContact" @click="clickli($event, list)"  v-bind:key="list.UserName">
+								<img src="/MyDemo/_urc/images/WX/QZ.png"/>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.NickName" v-if="list.RemarkName == ''"></span>
+								<span style="margin-left: 10px;margin-top: 10px;display: block;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;float: left;" v-html="list.RemarkName" v-else></span>
 							</li>
   						</transition-group>
 					</div>
 				</div>
 				<div id="right">
 					<div id="right_top"><span v-html="selectinfo.NickName"></span></div><hr>
-					<div id="right_center"></div>
+					<div id="right_center">
+						<transition-group name="flip-list" tag="ul">
+							<li v-for="msg in selectinfo.Msg" v-bind:key="msg.Content">
+								<img src="/MyDemo/_urc/images/WX/TX.png" style="margin-right: 20px;float: right;" v-if="msg.own"/>
+  								<div class="context" style="float: right;" v-if="msg.own">
+  									<div class="owntext">
+  										<span class="contextspan" v-html="msg.Content"></span>
+  									</div>
+  								</div>
+								<img src="/MyDemo/_urc/images/WX/TX.png" style="margin-left: 20px;float: left;" v-if="msg.own == false"/>
+ 								<div class="context" style="float: left;" v-if="msg.own == false">
+ 									<div class="othertext">
+ 										<span class="contextspan" v-html="msg.Content"></span>
+ 									</div>
+ 								</div>
+  								<div style="clear:both;"></div>
+ 							</li> 
+						</transition-group>
+					</div>
 					<div id="right_bottom"><hr>
 						<div id="tools">
 							<i class="layui-icon" style="font-size: 25px; margin-left:25px;">&#xe664;</i>    
 						</div>
 						<textarea></textarea>
-						<button class="layui-btn layui-bg-gray layui-btn-sm">发送(S)</button>
+						<button class="layui-btn layui-bg-gray layui-btn-sm" id="send">发送(S)</button>
 					</div>
 				</div>
 			</div>
@@ -196,6 +318,8 @@
 
 	<script>
 
+	var layer = layui.layer;
+	
 	//实例化VUE
 	var app = new Vue(
 	{ 
@@ -213,60 +337,67 @@
 			selectinfo : 
 			{
 				NickName : "",
-				UserName : ""
+				UserName : "",
+				Msg      : []
 			},
-			UserInfo : {},
-			ContactList:[],
+			UserInfo : {},		//当前登录用户信息
+			ChatSet : "",		//群Username
+			ContactList:[],		//最近联系人列表
 			SyncCheckKey:{},
-			MemberList : []
+			MemberList : [],	 //所有联系人的信息
+			BatchGetContact : [], //群数组
+			MPSubscribeMsgList : [] //公众号列表
 
 			
 		},
 		//网页加载时执行的方法(获取二维码)
-		created : function()
-		{
-			
-			var self = this;
-			
-			$("#main_div").hide();
-			
-			$.ajax(
-			{
-				url  	 : "/MyDemo/proxy/doPost",
-				type 	 : "get",
-				async 	 : true,
-				dataType : "text",
-				data 	 : 
-				{
-					"url"   : "https://login.wx.qq.com/jslogin",
-					"ContentType" : "text/html;charset=gbk",
-					"appid" : "wx782c26e4c19acffb",
-					"redirect_uri" : "https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage",
-					"fun"  : "new",
-					"lang" : "zh_CN",
-					"_"    : (new Date()).getTime()
-					
-				},
-				success  : function(result)
-				{
-					var QRLogin = result.split(";")
-					var code  = QRLogin[0].split("=")[1].replace(" ", "")
-					self.uuid = QRLogin[1].split("\"")[1];
-					
-					if(code == 200)
-					{
-						$("#QRimg")[0].src = "https://login.weixin.qq.com/qrcode/" + self.uuid;
-						
-						self.QRcode_after();
-					}
-					
-				},
-				error : function(res){}
-			})
-		},
+		created : function(){this.created();},
 		methods : 
 		{
-
+			created : function()
+			{
+				var self = this;
+				
+				$("#main_div").hide();
+				$("#login_div").show();
+				
+				
+				$.ajax(
+				{
+					url  	 : "/MyDemo/proxy/doPost",
+					type 	 : "get",
+					async 	 : true,
+					dataType : "text",
+					data 	 : 
+					{
+						"url"   : "https://login.wx.qq.com/jslogin",
+						"ContentType" : "text/html;charset=gbk",
+						"appid" : "wx782c26e4c19acffb",
+						"redirect_uri" : "https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage",
+						"fun"  : "new",
+						"lang" : "zh_CN",
+						"_"    : (new Date()).getTime()
+						
+					},
+					success  : function(result)
+					{
+						var QRLogin = result.split(";")
+						var code  = QRLogin[0].split("=")[1].replace(" ", "")
+						self.uuid = QRLogin[1].split("\"")[1];
+						
+						if(code == 200)
+						{
+							$("#QRimg").removeClass("layui-anim");
+							
+							$("#QRimg")[0].src = "https://login.weixin.qq.com/qrcode/" + self.uuid;
+							
+							self.QRcode_after();
+						}
+						
+					},
+					error : function(res){}
+				})
+			},
 			//获取二维码之后轮询检测用户时候扫描二维码，如果扫描轮询检测用户时候点击确认登录
 			QRcode_after : function()
 			{
@@ -336,8 +467,13 @@
 					success  : function(result)
 					{
 						
-						 $("#login_div").hide();
-						 $("#main_div").show();
+						//页面初始化
+
+						//隐藏登录页面，显示登录操作页面
+						 $("#login_div").slideUp("slow",function(){ $("#main_div").slideDown("slow");});
+
+						//隐藏聊天界面
+						 $("#right").hide();
 						 
 						 $("#right_bottom textarea").focus(function(){$("#right_bottom").css("background","#FFFFFF");$("#right_bottom textarea").css("background","#FFFFFF")});
 						 $("#right_bottom textarea").blur(function(){$("#right_bottom").css("background","#f2f2f2");$("#right_bottom textarea").css("background","#f2f2f2")});
@@ -376,13 +512,54 @@
 						console.log(result) 
 
 						self.UserInfo = result.User;
-						self.ContactList = result.ContactList;
 						self.SyncCheckKey = result.SyncKey;
+						self.ChatSet = result.ChatSet;
+						self.MPSubscribeMsgList = result.MPSubscribeMsgList;
+						self.getImages(result.User.HeadImgUrl);
+						
+						for(var i = 0;i<result.Count;i++)
+						{
+							if(result.ContactList[i].VerifyFlag != 24)
+							{
+								if(result.ContactList[i].KeyWord != "" && result.ContactList[i].KeyWord != "gh_")
+								{
+
+									result.ContactList[i].Img = "/MyDemo/_urc/images/WX/" + result.ContactList[i].KeyWord + ".jpg";
+
+								}
+								else if(result.ContactList[i].MemberCount > 0)
+								{
+									result.ContactList[i].Img = "/MyDemo/_urc/images/WX/QZ.png";
+								}
+								else
+								{
+									result.ContactList[i].Img = "/MyDemo/_urc/images/WX/TX.png";
+								}
+								
+								self.ContactList.push(result.ContactList[i]);
+							}
+						}
 
 						self.webwxstatusnotify();
 					},
 					error : function(res){}
 				})
+			},
+			getImages : function(url)
+			{
+// 				$.ajax(
+// 				{
+// 					url  	 : "https://wx.qq.com" + url,
+// 					type 	 : "get",
+// 					async 	 : true,
+// 					success  : function(result)
+// 					{
+// 						console.log("getImages-------------------")
+// 						console.log(result)
+// 					},
+// 					error : function(res){console.log("getImages-------------------")
+// 						console.log(res)}
+// 				})
 			},
 			webwxstatusnotify : function()
 			{
@@ -419,38 +596,21 @@
 				var self = this;
 				var html = "";
 				
-// 				for(var i=0;i<self.ContactList.length;i++)
-// 				{
-// 					var src = "";
-
-// 					if(self.ContactList[i].KeyWord != "" && self.ContactList[i].KeyWord != "gh_")
-// 					{
-// 						src = "/MyDemo/_urc/images/WX/" + self.ContactList[i].KeyWord + ".jpg";
-// 					}
-// 					else if(self.ContactList[i].MemberCount > 0)
-// 					{
-// 						src = "/MyDemo/_urc/images/WX/QZ.png";
-// 					}
-// 					else
-// 					{
-// 						src = "/MyDemo/_urc/images/WX/TX.png";
-// 					}
-					
-// 					html = "<li membercount='" + self.ContactList[i].MemberCount + "' username='" + self.ContactList[i].UserName + "'><a><img src=\"" + src + "\"/><span style=\"margin-left:10px;\"> " + self.ContactList[i].NickName.replace("�?", "").replace("�? ","").replace("�?","").replace("�?","") + "</span></a></li>";
-
-// 					$("#center_bottom ul").append(html);
-// 				}
-
-// 				$("#center_bottom li").bind("click", function(){self.clickli(this)});
-				
 				self.webwxgetcontact();
 				
 			},
 			clickli : function(event, index)
 			{
+				/**点击聊天列表*/
 				var self = this;
 				
 				console.log(event);
+				
+				//如果聊天界面处于隐藏状态则显示
+				if($("#right").css("display")=='none')
+				{
+					$("#right").show(1000);
+				}
 				
 				var e;
 				
@@ -464,11 +624,12 @@
 
 				self.selectinfo.NickName = index.NickName;
 				self.selectinfo.UserName = index.UserName;
+				self.selectinfo.Msg = index.Msg;
 				
 				console.log(self.selectinfo)
 
 				if(index.MemberCount != "0"){self.selectinfo.NickName += "("+ index.MemberCount +")"}
-				
+
 			},
 			webwxgetcontact : function()
 			{
@@ -494,8 +655,65 @@
 						
 						self.synccheck();
 						
-						self.webwxsync
+						self.webwxbatchgetcontact();
 						 
+					},
+					error : function(res){console.log(res)}
+				})
+			},
+			webwxbatchgetcontact : function()
+			{
+				var self = this;
+				
+				var list = [];
+				
+				
+				
+				var chatsets = self.ChatSet.split(",");
+				
+				for(var i = 0;i<chatsets.length;i++)
+				{
+					var element = {};
+
+					if(chatsets[i].indexOf("@") >= 0)
+					{
+						element["UserName"] = chatsets[i];
+						element["EncryChatRoomId"] = "";
+					}
+					
+					list.push(element);
+					
+				}
+
+				var BaseRequest  = "{BaseRequest:{Uin:\"" + self.wxuin + "\",Sid:\"" + self.wxsid + "\",Skey:\"" + self.skey + "\",DeviceID:\"e" + ("" + Math.random().toFixed(15)).substring(2, 17) +"\"},";
+					BaseRequest += "Count:\"" + list.length + "\",";
+					BaseRequest += "List:" + JSON.stringify(list) + "}";
+				
+				$.ajax(
+				{
+					type   : "POST",
+					url  	 : "/MyDemo/proxy/doPostRequestPayload",
+					dataType : "json",
+					data 	 :
+					{
+						"url"  : "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxbatchgetcontact?type=ex&lang=zh_CN&pass_ticket=" + self.pass_ticket + "&r=" + (+new Date),
+						"BaseRequest" : BaseRequest
+					},
+					success  : function(result)
+					{
+						console.log("webwxbatchgetcontact:---------")
+						console.log(result)
+						
+						for(var i = 0;i < result.Count;i++)
+						{
+							if(result.ContactList[i].MemberCount > 0)
+							{
+								self.BatchGetContact.push(result.ContactList[i]);
+							}
+						}
+						console.log("BatchGetContact:---------")
+						console.log(self.BatchGetContact)
+						
 					},
 					error : function(res){console.log(res)}
 				})
@@ -528,17 +746,25 @@
 							for(var i = 0;i<result.AddMsgCount;i++)
 							{
 								
+								var UserName = result.AddMsgList[i].FromUserName;
+								var isOwn = false;
 								var no = true;
-								
 								var list = {};
+								
+								if(result.AddMsgList[i].Content == "" && result.AddMsgList[i].MsgType == 51){continue;}
+								
+								if(result.AddMsgList[i].FromUserName == self.UserInfo.UserName)
+								{
+									UserName = result.AddMsgList[i].ToUserName;isOwn = true;
+								}
 								
 								for(var j = 0;j < self.ContactList.length;j++)
 								{
-									if(result.AddMsgList[i].FromUserName == self.ContactList[j].UserName)
+									if(UserName == self.ContactList[j].UserName)
 									{
 										list = self.ContactList[j];
 										
-										self.ContactList.splice(j+1, 1);
+										self.ContactList.splice(j, 1);
 										
 										no = false;break;
 									}
@@ -548,23 +774,93 @@
 								{
 									for(var j = 0;j < self.MemberList.length;j++)
 									{
-										if(result.AddMsgList[i].FromUserName == self.MemberList[j].UserName)
+										if(UserName == self.MemberList[j].UserName)
 										{
-											list = self.MemberList[j];break;
+											list = self.MemberList[j];no = false;break;
 										}
 									}
 								}
 								
-								if(result.AddMsgList[i].MsgType == "1")
+								if(no)
 								{
-									list["Msg"] = result.AddMsgList[i].Content;
+									for(var j = 0;j < self.BatchGetContact.length;j++)
+									{
+										if(UserName == self.BatchGetContact[j].UserName)
+										{
+											list = self.BatchGetContact[j];no = false;break;
+										}
+									}
 									
-								}else
-								{
-									list["Msg"] = "[此消息暂不支持]";
 								}
 								
+								var msg = {};
+
+								//msgType(3:图片，1：文字)
+								if(result.AddMsgList[i].MsgType == 3)
+								{
+									if(list.MemberCount > 0)
+									{
+										list["newMsg"] = "[图片]";
+										msg["Content"] = result.AddMsgList[i].Content.split(":")[1].replace(new RegExp("<br/>"), '');
+									}
+									else
+									{
+										list["newMsg"] = "[图片]";
+										msg["Content"] = "<img class='msg-img' ng-src='https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetmsgimg?MsgID=" + result.AddMsgList[i].MsgId + "&skey=" + self.skey + "&type=slave' src='https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetmsgimg?MsgID=" + result.AddMsgList[i].MsgId + "&skey=" + self.skey + "&type=slave' style='height: " + result.AddMsgList[i].ImgHeight + "px; width: " + result.AddMsgList[i].ImgWidth + "px;' />";
+									}
+									
+								}
+								else if(result.AddMsgList[i].MsgType == 1)
+								{
+									if(list.MemberCount > 0)
+									{
+										list["newMsg"] = result.AddMsgList[i].Content.split(":")[1].replace(new RegExp("<br/>","g"), '');
+										msg["Content"] = result.AddMsgList[i].Content.split(":")[1].replace(new RegExp("<br/>"), '');
+									}
+									else
+									{
+										list["newMsg"] = result.AddMsgList[i].Content.replace(new RegExp("<br/>","g"), '');
+										msg["Content"] = result.AddMsgList[i].Content;
+									}
+								}
+								else
+								{
+									list["newMsg"] = "[此消息暂不支持]";
+									msg["Content"] = "[此消息暂不支持]";
+								}
+								
+								var date = new Date(result.AddMsgList[i].CreateTime * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+								
+								list["newTime"] = date.getHours() + ':' + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+								msg["CreateTime"] = date.getHours() + ':' + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+								msg["own"] = isOwn;
+								
+								if(list["Msg"] == undefined){list["Msg"] = [];}
+
+								list["Msg"].push(msg);
+								
+								if(list.KeyWord != "" && list.KeyWord != "gh_")
+								{
+
+									list.Img = "/MyDemo/_urc/images/WX/" + list.KeyWord + ".jpg";
+
+								}
+								else if(list.MemberCount > 0)
+								{
+									list.Img = "/MyDemo/_urc/images/WX/QZ.png";
+								}
+								else
+								{
+									list.Img = "/MyDemo/_urc/images/WX/TX.png";
+								}
+
+								console.log("list:----------------------------");
+								console.log(list);
+								
 								self.ContactList.splice(0, 0, list);
+								
+								console.log("ContactList:----------------------------");
+								console.log(self.ContactList);
 							}
 							
 							self.synccheck();
@@ -587,14 +883,16 @@
 					dataType : "script",
 					data 	 :
 					{
-						"url"  : "https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?uin=" + self.UserInfo.Uin + "&r=" + (+new Date) + "&skey=" + self.skey + "&sid=" + self.wxsid + "&deviceid=e" + ("" + Math.random().toFixed(15)).substring(2, 17) + "&synckey=" + self.getFormateSyncCheckKey() + "&&pass_ticket=" + self.pass_ticket + "&_=" + (new Date()).getTime(),
+						"url"  : "https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?uin=" + self.UserInfo.Uin + "&r=" + (+new Date) + "&skey=" + self.skey + "&sid=" + self.wxsid + "&deviceid=e" + ("" + Math.random().toFixed(15)).substring(2, 17) + "&synckey=" + self.getFormateSyncCheckKey() + "&pass_ticket=" + self.pass_ticket + "&_=" + (new Date()).getTime(),
 						"BaseRequest" : BaseRequest
 					},
 					success  : function(result)
 					{
 						var synccheck = eval("(" + result.split("=")[1] + ")");
+						
+						if(synccheck.retcode != "0"){self.created();return;}
 
-						if(synccheck.selector == "2"){self.webwxsync();}else{self.synccheck();}
+						if(synccheck.selector == "2"){self.webwxsync();}else if(synccheck.selector == "0"){self.synccheck();}else{self.created();return;}
 						
 					},
 					error : function(res){console.log(res)}
@@ -604,13 +902,15 @@
 			{
 				var self = this;
 				
-				var msg = $("#right_bottom textarea").val();
+				var content = $("#right_bottom textarea").val(); $("#right_bottom textarea").val("");
+				
+				if(content == ""){layui.layer.tips('不能发送空白信息', '#send', {tips: 1});return;}
 				
 				var ClientMsgId = ((new Date()).getTime() + Math.random().toFixed(3)).replace(".", "");
 				
 				var BaseRequest  = "{BaseRequest:{Uin:\"" + self.wxuin + "\",Sid:\"" + self.wxsid + "\",Skey:\"" + self.skey + "\",DeviceID:\"e" + ("" + Math.random().toFixed(15)).substring(2, 17) +"\"},";
 					BaseRequest += "Msg:{ClientMsgId:\"" + ClientMsgId + "\",";
-					BaseRequest += "Content:\"" + msg + "\",";
+					BaseRequest += "Content:\"" + content + "\",";
 					BaseRequest += "FromUserName:\"" + self.UserInfo.UserName + "\",";
 					BaseRequest += "LocalID:\"" + ClientMsgId + "\",";
 					BaseRequest += "Type:\"1\",";
@@ -621,25 +921,79 @@
 					{
 						type   : "POST",
 						url  	 : "/MyDemo/proxy/doPostRequestPayload",
-						dataType : "script",
+						dataType : "json",
 						data 	 :
 						{
-							"url"  : "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg?lang=zh_CN",
+							"url"  : "https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg?lang=zh_CN&pass_ticket=" + self.pass_ticket,
 							"BaseRequest" : BaseRequest
 						},
 						success  : function(result)
 						{
-							
+							console.log("webwxsendmsg:--------------------------------")
 							console.log(result)
 							
-							var synccheck = eval("(" + result.split("=")[1] + ")");
+							var list = {};
+							var msg = {};
+							for(var j = 0;j < self.ContactList.length;j++)
+							{
+								if(self.selectinfo.UserName == self.ContactList[j].UserName)
+								{
+									list = self.ContactList[j];
+									
+									self.ContactList.splice(j, 1);
+									
+									break;
+								}
+							}
+							
+							var date = new Date(); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+							
+							list["newTime"] = date.getHours() + ':' + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+							list["newMsg"] = content.replace(new RegExp("<br/>","g"), '');
 
-// 	 						if(synccheck.retcode != "0"){self.synccheck();}
-							 
+							msg["own"] = true;
+							msg["Content"] = content;
+							msg["CreateTime"] = date.getHours() + ':' + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+							
+							if(list["Msg"] == undefined){list["Msg"] = [];self.selectinfo.Msg = list.Msg;}
+
+							list["Msg"].push(msg);
+							
+							console.log("webwxsendmsg1:--------------------------------")
+							console.log(list)
+
+							self.ContactList.splice(0, 0, list);
+							
+							console.log("webwxsendmsg2:--------------------------------")
+							console.log(self.ContactList)
+							
 						},
 						error : function(res){console.log(res)}
 					})
 				
+			},
+			modeclick : function(e, index)
+			{
+				/*界面左侧模块的点击事件**/
+				if(index == 0)
+				{
+					$(".center_bottom_2").slideDown("slow");
+					$(".center_bottom_1").slideDown("slow");
+					$(".center_bottom_0").slideDown("slow");
+				}
+				if(index == 1)
+				{
+					$(".center_bottom_2").slideDown("slow");
+					$(".center_bottom_1").slideDown("slow");
+					$(".center_bottom_0").slideUp("slow");
+
+					$("#right").hide(1000);
+				}
+				if(index == 2)
+				{
+					$(".center_bottom_0").slideUp("slow");
+					$(".center_bottom_1").slideUp("slow");
+				}
 			},
 			getFormateSyncCheckKey : function()
 			{

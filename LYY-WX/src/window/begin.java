@@ -53,10 +53,31 @@ public class begin
 			
 			StringBuffer data_webwxinit = getdata.webwxinit();
 			
-			getdata.userinfo    = ScriptUtils.getUserInfo_json(data_webwxinit.toString());
-			getdata.ContactList = ScriptUtils.getContactList_json();
+			getdata.setUserinfo(ScriptUtils.getUserInfo_json(data_webwxinit.toString()));
+			getdata.getContatInfo().setContactList(ScriptUtils.getContactList_json());
+			getdata.setSyncKey(ScriptUtils.getSyncKey_json());
 
 			loginFrame.createMainJFrame(getdata);
+			
+			getdata.webwxstatusnotify();
+			
+			getdata.webwxsync();
+
+			boolean LoginOut = false;
+			
+			do 
+			{
+				Map<String, Object> synccheck_data = getdata.synccheck();
+				
+				if("2".equals(synccheck_data.get("selector")))
+				{
+					ScriptUtils.jsonFormatSyncKey(getdata.webwxsync().toString());
+					getdata.setSyncKey(ScriptUtils.getSyncKey_json());
+					getdata.setAddMsgList(ScriptUtils.getAddMsgList_json());
+					loginFrame.addMsgJPanel(getdata);
+				}
+
+			}while(!LoginOut);
 			
 			
 		}
