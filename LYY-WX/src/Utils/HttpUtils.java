@@ -53,11 +53,11 @@ public class HttpUtils
             while((line = reader.readLine()) != null)
             {
 
-               System.out.println(line);
+
                sb.append(line);
 
             }
-            
+            System.out.println(line);
             System.out.println("---------------------------------------");
             
             paramout.close();
@@ -107,11 +107,10 @@ public class HttpUtils
             {
 
 
-               System.out.println(line);
                sb.append(line);
 
             }
-            
+            System.out.println(sb);
             System.out.println("---------------------------------------");
             
             paramout.close();
@@ -169,10 +168,10 @@ public class HttpUtils
 	        while ((line = br.readLine()) != null)
 	        {
 	        	sb.append(new String(line.getBytes("GBK"),"UTF-8"));
-	        	
-	            System.out.println(new String(line.getBytes("GBK"),"UTF-8"));
 	        }
 
+	        System.out.println(sb);
+	        
 	        System.out.println("---------------------------------------");
 	        
 	        br.close();
@@ -220,9 +219,9 @@ public class HttpUtils
 	        {
 	        	sb.append(new String(line.getBytes("GBK"),"UTF-8"));
 	        	
-	            System.out.println(new String(line.getBytes("GBK"),"UTF-8"));
 	        }
 
+	        System.out.println(sb);
 	        System.out.println("---------------------------------------");
 	        
 	        br.close();

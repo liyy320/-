@@ -2,6 +2,7 @@ package bean;
 
 public class ContactBean
 {
+	private String userName;
 	private String headImgUrl;
 	private String nickName;
 
@@ -20,6 +21,14 @@ public class ContactBean
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	

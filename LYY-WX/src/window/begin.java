@@ -29,7 +29,7 @@ public class begin
 		{
 			Image image = getdata.get_qrcode(result_uuid.get("uuid").toString());
 			
-			JFrame jf = loginFrame.createLoginJFrame(image);
+			JFrame jf = loginFrame.createLoginJFrame(getdata, image);
 			
 			boolean NoLogin = true;
 			
@@ -49,16 +49,16 @@ public class begin
 			
 			getdata.webwxnewloginpage(redirect_uri);
 			
-			jf.setVisible(false);
-			
 			StringBuffer data_webwxinit = getdata.webwxinit();
 			
 			getdata.setUserinfo(ScriptUtils.getUserInfo_json(data_webwxinit.toString()));
 			getdata.getContatInfo().setContactList(ScriptUtils.getContactList_json());
 			getdata.setSyncKey(ScriptUtils.getSyncKey_json());
+			getdata.setAllContact(ScriptUtils.getAllContanctList(getdata.webwxgetcontact()));
 
+			jf.setVisible(false);
 			loginFrame.createMainJFrame(getdata);
-			
+
 			getdata.webwxstatusnotify();
 			
 			getdata.webwxsync();

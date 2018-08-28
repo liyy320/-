@@ -1,15 +1,14 @@
 package window;
 
 import java.awt.Image;
+import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 import Utils.HttpUtils;
 import Utils.ScriptUtils;
@@ -24,7 +23,11 @@ public class getData
 {
 
 	private int tip = 1;
-	//登陆信息
+	
+	/**项目信息*/
+	public final static String PROJECTPATH = System.getProperty("user.dir");
+	
+	//登陆信息 
 	private LoginInfoBean loginInfo = new LoginInfoBean(); 					//登录信息
 	private UserInfoBean userinfo = new UserInfoBean();						//登录用户信息
 	private ContatInfoBean contatInfo = new ContatInfoBean();
@@ -32,7 +35,7 @@ public class getData
 	private ChatJPanelBean chatJPanel = new ChatJPanelBean();				//聊天界面的对象
 	private Map<String, Object> SyncKey = null;								//获取最新消息时用到
 	private List<AddMsgBean> AddMsgList = null;								//最新消息列表
-	
+	private List<ContactBean> allContact = null;							//所有联系人列表
 	/**
 	 * 获取登陆二维码时用的随机码
 	 * 
@@ -271,14 +274,51 @@ public class getData
 		
 	}
 	
-	public Image getimg(String url)
+	public String webwxgetcontact()
+	{
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("lang",  "zh_CN");
+		params.put("skey", loginInfo.getSkey());
+		params.put("seq",  "0");
+		params.put("pass_ticket", loginInfo.getPass_ticket());
+		
+		StringBuffer baserequest = new StringBuffer("{");
+
+		baserequest.append("\"BaseRequest\":{");
+		baserequest.append("\"Uin\":\"" + loginInfo.getWxuin() + "\",");
+		baserequest.append("\"Sid\":\"" + loginInfo.getWxsid() + "\",");
+		baserequest.append("\"Skey\":\"" + loginInfo.getSkey() + "\",");
+		baserequest.append("\"DeviceID\":\"" + ScriptUtils.getDeviceID() + "\"}");
+		baserequest.append("}");
+		
+		StringBuffer sb = HttpUtils.doPostRequestPayload("https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact", params, baserequest.toString());
+		
+		return sb.toString();
+	}
+	
+	public Image getimg(String url, int isLocation)
 	{
 
 		Image image = null;
 
 		try 
 		{
-			image = ImageIO.read(new URL("https://wx.qq.com" + url));
+			if(isLocation == 1)
+			{
+				File  file = new File(url);
+				
+				image = ImageIO.read(file);
+			}
+			else
+			{
+				image = ImageIO.read(new URL("https://wx.qq.com" + url));
+				
+				if(image == null) 
+				{
+					image = ImageIO.read(new URL("https://wx.qq.com" + url));
+				}
+			}
 			
 		} catch (Exception e)
 		{
@@ -336,6 +376,14 @@ public class getData
 
 	public void setContatInfo(ContatInfoBean contatInfo) {
 		this.contatInfo = contatInfo;
+	}
+
+	public List<ContactBean> getAllContact() {
+		return allContact;
+	}
+
+	public void setAllContact(List<ContactBean> allContact) {
+		this.allContact = allContact;
 	}
 	
 }

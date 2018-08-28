@@ -7,5 +7,7 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="dataFormat"/>
+	<classpathentry kind="src" path="_urc"/>
+	<classpathentry kind="src" path="images"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

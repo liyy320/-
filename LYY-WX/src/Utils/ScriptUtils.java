@@ -34,6 +34,7 @@ public class ScriptUtils
 					+ "var SyncKey = {};"
 					+ "var AddMsgCount = 0;"
 					+ "var AddMsgList = [];"
+					+ "var AllContanct = {};"
 					+ "function jsonformat(str)"
 					+ "{"
 					+ "webwxinit_data = eval('(' + str + ')');"
@@ -55,7 +56,14 @@ public class ScriptUtils
 					+ "function getSyncKeyCount(){return SyncKey.Count}"
 					+ "function getSyncKey(field, index){return SyncKey.List[index][field]}"
 					+ "function getAddMsgCount(){return AddMsgCount;}"
-					+ "function getAddMsgList(field, index){return AddMsgList[index][field]}");
+					+ "function getAddMsgList(field, index){return AddMsgList[index][field]}"
+					+ "function jsonFormatAllContanct(str)"
+					+ "{"
+					+ "AllContanct = eval('(' + str + ')');"
+					+ "}"
+					+ "function getAllContanctCount(){return AllContanct.MemberCount;}"
+					+ "function getAllContanctList(field, index){return AllContanct.MemberList[index][field]}"
+					+ "");
 			
 		}
 		catch (Exception e)
@@ -288,6 +296,46 @@ public class ScriptUtils
 		}
 		
 		return new ArrayList<AddMsgBean>();
+	}
+	
+	public static List<ContactBean> getAllContanctList(String str)
+	{
+		
+		if(engine instanceof Invocable)
+		{    
+			try
+			{
+				((Invocable)engine).invokeFunction("jsonFormatAllContanct", str);
+				
+				List<ContactBean> AllContanctList = new ArrayList<ContactBean>();
+				
+				int count = (int) ((Invocable)engine).invokeFunction("getAllContanctCount");
+				
+				for(int i = 0; i < count; i++)
+				{
+					ContactBean bean = new ContactBean();
+					
+					bean.setNickName(((Invocable)engine).invokeFunction("getAllContanctList", "NickName", i).toString());
+					bean.setUserName(((Invocable)engine).invokeFunction("getAllContanctList", "UserName", i).toString());
+					bean.setHeadImgUrl(((Invocable)engine).invokeFunction("getAllContanctList", "HeadImgUrl", i).toString());
+					
+					AllContanctList.add(bean);
+				}
+
+				return AllContanctList;
+
+			}
+			catch (NoSuchMethodException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ScriptException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return new ArrayList<ContactBean>();
 	}
 	
 }
