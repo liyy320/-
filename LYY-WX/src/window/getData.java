@@ -306,9 +306,8 @@ public class getData
 		{
 			if(isLocation == 1)
 			{
-				File  file = new File(url);
 				
-				image = ImageIO.read(file);
+				image = ImageIO.read(new File(url));
 			}
 			else
 			{
@@ -316,7 +315,7 @@ public class getData
 				
 				if(image == null) 
 				{
-					image = ImageIO.read(new URL("https://wx.qq.com" + url));
+					image = ImageIO.read(new File(getData.PROJECTPATH + "/images/2KriyDK.png"));
 				}
 			}
 			
