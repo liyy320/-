@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -220,12 +222,12 @@ public class loginFrame extends Frame
 		 
 		 JScrollPane zjcontactJScrollPane = new JScrollPane(lxr_jp);
 		 
+		 zjcontactJScrollPane.setBounds(0, 80, center_jp.getWidth(), center_jp.getHeight() - search_jp.getHeight() - 33);
+		 
 		 JScrollBar v = zjcontactJScrollPane.getVerticalScrollBar();
 
 		 v.setUnitIncrement((int)(zjcontactJScrollPane.getHeight() * 0.4));
 		 
-		 zjcontactJScrollPane.setBounds(0, 80, center_jp.getWidth(), center_jp.getHeight() - search_jp.getHeight() - 33);
-
 		 lxr_jp.setLayout(null);
 		 lxr_jp.setPreferredSize(new Dimension(zjcontactJScrollPane.getWidth() - 20, getdata.getContatInfo().getContactList().size() * search_jp.getHeight()));
 		 lxr_jp.setLocation(0, search_jp.getHeight());
@@ -455,6 +457,7 @@ public class loginFrame extends Frame
 		 
 	}
 	
+	//添加新的消息
 	public void addMsgJPanel(getData getdata)
 	{
 		if(getdata.getAddMsgList().size() == 0) {return;}
@@ -466,6 +469,8 @@ public class loginFrame extends Frame
 			 int index = i;
 			 
 			 ContactBean contactBean = findContanct(getdata, getdata.getAddMsgList().get(i).getFromUserName());
+			 
+			 contactBean.getChatContent().add(getdata.getAddMsgList().get(i));
 
 			 if(contactBean == null) {continue;}
 
@@ -480,13 +485,30 @@ public class loginFrame extends Frame
 			 myPanel img = new myPanel(getdata.getimg(contactBean.getHeadImgUrl(), 0), 45, 45);
 	
 			 img.setLocation(10, 25);
-			 
+
+			 //添加昵称
 			 JLabel nickName = new JLabel(contactBean.getNickName());
 
 			 nickName.setFont(new Font("宋体", 0, 14));
 			 nickName.setSize(130,20);
 			 nickName.setLocation(img.getX() * 2 + img.getWidth(), 25);
 			 
+			 //添加消息发送的日期
+			 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");  
+			 
+			 JLabel time = new JLabel(sdf.format(new Date(Long.valueOf(getdata.getAddMsgList().get(i).getCreateTime() + "000"))));
+
+			 time.setFont(new Font("宋体", 0, 12));
+			 time.setSize(60, 20);
+			 time.setLocation(contact_jp.getWidth() - time.getWidth(), nickName.getY());
+			 
+			 //添加最新发来的消息内容
+			 JLabel content = new JLabel(getdata.getAddMsgList().get(i).getContent());
+
+			 content.setFont(new Font("宋体", 0, 12));
+			 content.setSize(130,20);
+			 content.setLocation(img.getX() * 2 + img.getWidth(), img.getY() + img.getHeight() - content.getHeight());
+
 			 contact_jp.addMouseListener(new MouseListener()
 			 {
 	
@@ -519,32 +541,34 @@ public class loginFrame extends Frame
 					
 					contact_jp.setBackground(Color.decode("#BDBDBD"));
 					
-					getdata.getChatJPanel().getJlNickName().setText("测试新增信息");
+					getdata.getChatJPanel().getJlNickName().setText(contactBean.getNickName());
 
 					getdata.getContatInfo().setContactJPanelClick(contact_jp);
 					getdata.setContactDataClick(getdata.getContatInfo().getContactList().get(index));
 				}
 			});
 
-			 
-			 
 			 contact_jp.add(img);
 			 contact_jp.add(nickName);
+			 contact_jp.add(time);
+			 contact_jp.add(content);
 			 getdata.getContatInfo().getLxrJPanel().add(contact_jp);
 			 getdata.getContatInfo().getContactJPanel().add(contact_jp);
-			 
-			 contact_jp_Y++;
-				 
-		}
+			 getdata.getContatInfo().getContactList().add(contactBean);
 
-		for(JPanel j : getdata.getContatInfo().getContactJPanel())
-		{
-			j.setLocation(0, j.getY() + j.getHeight() * getdata.getAddMsgList().size());
-			
+			 contact_jp_Y++;
+
+			 for(JPanel j : getdata.getContatInfo().getContactJPanel())
+			 {
+				j.setLocation(0, j.getY() + j.getHeight());
+				
+			 }
+				 
 		}
 		
 	}
 	
+	//在所有联系人中查找联系人
 	public ContactBean findContanct(getData getdata, String username)
 	{
 		
@@ -552,7 +576,19 @@ public class loginFrame extends Frame
 		{
 			if(getdata.getContatInfo().getContactList().get(i).getUserName() != null && getdata.getContatInfo().getContactList().get(i).getUserName().equals(username))
 			{
-				return getdata.getContatInfo().getContactList().get(i);
+				ContactBean contactBean = getdata.getContatInfo().getContactList().get(i);
+				
+				for(JPanel j : getdata.getContatInfo().getContactJPanel())
+				 {
+					j.setLocation(0, j.getY() - j.getHeight());
+					
+				 }
+				
+				getdata.getContatInfo().getLxrJPanel().remove(i);
+				
+				getdata.getContatInfo().getContactList().remove(i);
+				
+				return contactBean;
 			}
 		}
 		
@@ -581,6 +617,7 @@ public class loginFrame extends Frame
 		 jpRight.setBackground(Color.decode("#FAFAFA"));
 		 jpRight.setLocation((left_jp.getWidth() + center_jp.getWidth()), 0);
 
+		 //聊天界面上方区域START
 		 JPanel jpTop    = new JPanel();
 
 		 jpTop.setLayout(null);
@@ -598,11 +635,45 @@ public class loginFrame extends Frame
 		 getdata.getChatJPanel().setJlNickName(jlNickName);
 
 		 jpTop.add(jlNickName);
+		 
+		 //聊天界面上方区域END
 
 		 JPanel jpCenter = new JPanel();
+		 
+		 jpCenter.setLayout(null);
+		 jpCenter.setSize(jpRight.getWidth(), 450);
+		 jpCenter.setLocation(0, jpTop.getHeight());
+		 jpCenter.setBackground(Color.decode("#FAFAFA"));
+		 jpCenter.setBorder(BorderFactory.createEtchedBorder());
+		 
+		 JPanel allMsgJPanel = new JPanel();
+		 
+		 JScrollPane JScrollPane = new JScrollPane(allMsgJPanel);
+		 
+		 JScrollPane.setBounds(0, 0, jpCenter.getWidth(), jpCenter.getHeight());
+		 
+		 JScrollBar v = JScrollPane.getVerticalScrollBar();
+
+		 v.setUnitIncrement((int)(JScrollPane.getHeight() * 0.4));
+		 
+		 allMsgJPanel.setLayout(null);
+		 allMsgJPanel.setBackground(Color.decode("#FAFAFA"));
+		 allMsgJPanel.setPreferredSize(new Dimension(JScrollPane.getWidth() - 20, jpCenter.getHeight() * 2));
+		 
+		 
+		 JLabel jlabel = new JLabel("一二三四五123，.");
+		 
+		 jlabel.setSize(jlabel.getText().length() * 15, 20);
+		 jlabel.setBackground(Color.decode("#FFFFFF"));
+		 jlabel.setLocation(10,10);
+		 
+		 allMsgJPanel.add(jlabel);
+		 jpCenter.add(JScrollPane);
+		 
 		 JPanel jpBottom = new JPanel();
 		 
 		 jpRight.add(jpTop);
+		 jpRight.add(jpCenter);
 		 
 		 return jpRight;
 	}
