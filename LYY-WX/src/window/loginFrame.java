@@ -602,7 +602,7 @@ public class loginFrame extends Frame
 		
 		return null;
 	}
-	
+
 	/**
 	 * 
 	 * 创建聊天界面区域
@@ -611,7 +611,7 @@ public class loginFrame extends Frame
 	{
 		 //界面聊天面板
 		 JPanel jpRight = new JPanel();
-		 
+
 		 jpRight.setLayout(null);
 		 jpRight.setSize(jf.getWidth() - left_jp.getWidth() - center_jp.getWidth(), jf.getHeight());
 		 jpRight.setBackground(Color.decode("#FAFAFA"));
@@ -627,7 +627,7 @@ public class loginFrame extends Frame
 		 jpTop.setBorder(BorderFactory.createEtchedBorder());
 
 		 JLabel jlNickName = new JLabel();
-		 
+
 		 jlNickName.setSize(jpTop.getWidth(), 30);
 		 jlNickName.setLocation(30, (jpTop.getHeight() - jlNickName.getHeight())/2);
 		 jlNickName.setText("");
@@ -635,49 +635,49 @@ public class loginFrame extends Frame
 		 getdata.getChatJPanel().setJlNickName(jlNickName);
 
 		 jpTop.add(jlNickName);
-		 
+
 		 //聊天界面上方区域END
 
 		 JPanel jpCenter = new JPanel();
-		 
+
 		 jpCenter.setLayout(null);
 		 jpCenter.setSize(jpRight.getWidth(), 450);
 		 jpCenter.setLocation(0, jpTop.getHeight());
 		 jpCenter.setBackground(Color.decode("#FAFAFA"));
 		 jpCenter.setBorder(BorderFactory.createEtchedBorder());
-		 
+
 		 JPanel allMsgJPanel = new JPanel();
-		 
+
 		 JScrollPane JScrollPane = new JScrollPane(allMsgJPanel);
-		 
+
 		 JScrollPane.setBounds(0, 0, jpCenter.getWidth(), jpCenter.getHeight());
-		 
+
 		 JScrollBar v = JScrollPane.getVerticalScrollBar();
 
 		 v.setUnitIncrement((int)(JScrollPane.getHeight() * 0.4));
-		 
+
 		 allMsgJPanel.setLayout(null);
 		 allMsgJPanel.setBackground(Color.decode("#FAFAFA"));
 		 allMsgJPanel.setPreferredSize(new Dimension(JScrollPane.getWidth() - 20, jpCenter.getHeight() * 2));
-		 
-		 
-		 JLabel jlabel = new JLabel("一二三四五123，.");
-		 
-		 jlabel.setSize(jlabel.getText().length() * 15, 20);
+
+		 JLabel jlabel = new JLabel("一二三四五一二三四五12");
+
+		 jlabel.setSize(jlabel.getText().length() * 13, 30);
+		 jlabel.setOpaque(true);
 		 jlabel.setBackground(Color.decode("#FFFFFF"));
 		 jlabel.setLocation(10,10);
-		 
+
 		 allMsgJPanel.add(jlabel);
 		 jpCenter.add(JScrollPane);
-		 
+
 		 JPanel jpBottom = new JPanel();
-		 
+
 		 jpRight.add(jpTop);
 		 jpRight.add(jpCenter);
-		 
+
 		 return jpRight;
 	}
-	
+
 	/**
 	 * 
 	 * 创建一个画布
@@ -688,11 +688,11 @@ public class loginFrame extends Frame
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		private Image image;
 		private int width;
 		private int height;
-		
+
 		public myPanel(Image image, int width, int height)
 		{
 			setSize(width, height);
@@ -700,9 +700,9 @@ public class loginFrame extends Frame
 			this.image = image;
 			this.width = width;
 			this.height = height;
-			
+
 		}
-		
+
 		public void paint(Graphics g)
 		{
 			g.drawImage(image, 0, 0, width, height, null);
