@@ -11,6 +11,7 @@ public class AddMsgBean
 	private String imgStatus;
 	private String createTime;
 	private String newMsgId;
+	private String headImgUrl;
 
 	public String getMsgId() {
 		return msgId;
@@ -66,5 +67,13 @@ public class AddMsgBean
 	public void setNewMsgId(String newMsgId) {
 		this.newMsgId = newMsgId;
 	}
+	public String getHeadImgUrl() {
+		return headImgUrl;
+	}
+	public void setHeadImgUrl(String headImgUrl) {
+		this.headImgUrl = headImgUrl;
+	}
+	
+	
 	
 }

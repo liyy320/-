@@ -111,9 +111,9 @@ public class getData
 		{
 			
 			String src = (win[1].split("=")[1] + ";" + win[2]).trim().replaceAll("'", "");
-			
+
 			result.put("src", src);
-			
+
 		}
 		else if("200".equals(code))
 		{

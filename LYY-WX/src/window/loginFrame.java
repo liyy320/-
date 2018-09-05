@@ -292,12 +292,14 @@ public class loginFrame extends Frame
 						
 						contact_jp.setBackground(Color.decode("#BDBDBD"));
 						
+						getdata.getChatJPanel().getJpRight().setVisible(true);
 						getdata.getChatJPanel().getJlNickName().setText(getdata.getContatInfo().getContactList().get(index).getNickName());
-						
 						getdata.getContatInfo().setContactJPanelClick(contact_jp);getdata.setContactDataClick(getdata.getContatInfo().getContactList().get(index));
+						
+						addAllMsg(getdata);
 					}
 				});
-				 
+
 				 getdata.getContatInfo().getContactJPanel().add(contact_jp);
 				 
 				 contact_jp.add(img);
@@ -350,13 +352,13 @@ public class loginFrame extends Frame
 		 int step = 100;
 		 int start = 0;
 		 int end = 100;
-		 int c = getdata.getAllContact().size() / step;
+		 int c = getdata.getAllContact().size() / step - 1;
 		 int last = getdata.getAllContact().size() % step;
 		 
 		 for(int i = 0; i <= c;i++)
 		 {
 			 start = step * i;
-			 if(i == c - 1)
+			 if(i == c)
 			 {
 				 end = step + step * i + last;
 			 }
@@ -364,7 +366,7 @@ public class loginFrame extends Frame
 			 {
 				 end = step * i + step;
 			 }
-			 
+
 			 addContanctPage(center_jp, search_jp, zjcontactJScrollPane, lxr_jp, getdata, start, end);
 		 }
 
@@ -470,9 +472,9 @@ public class loginFrame extends Frame
 			 
 			 ContactBean contactBean = findContanct(getdata, getdata.getAddMsgList().get(i).getFromUserName());
 			 
-			 contactBean.getChatContent().add(getdata.getAddMsgList().get(i));
-
 			 if(contactBean == null) {continue;}
+			 
+			 contactBean.getChatContent().add(getdata.getAddMsgList().get(i));
 
 			 JPanel contact_jp = new JPanel();
 			 
@@ -538,13 +540,15 @@ public class loginFrame extends Frame
 				public void mouseClicked(MouseEvent e)
 				{
 					if(getdata.getContatInfo().getContactJPanelClick() != null) {getdata.getContatInfo().getContactJPanelClick().setBackground(Color.decode("#F2F2F2"));}
-					
-					contact_jp.setBackground(Color.decode("#BDBDBD"));
-					
-					getdata.getChatJPanel().getJlNickName().setText(contactBean.getNickName());
 
+					contact_jp.setBackground(Color.decode("#BDBDBD"));
+
+					getdata.getChatJPanel().getJpRight().setVisible(true);
+					getdata.getChatJPanel().getJlNickName().setText(contactBean.getNickName());
 					getdata.getContatInfo().setContactJPanelClick(contact_jp);
 					getdata.setContactDataClick(getdata.getContatInfo().getContactList().get(index));
+
+					addAllMsg(getdata);
 				}
 			});
 
@@ -591,7 +595,7 @@ public class loginFrame extends Frame
 				return contactBean;
 			}
 		}
-		
+
 		for(int i = 0; i < getdata.getAllContact().size(); i++)
 		{
 			if(getdata.getAllContact().get(i).getUserName().equals(username))
@@ -616,13 +620,14 @@ public class loginFrame extends Frame
 		 jpRight.setSize(jf.getWidth() - left_jp.getWidth() - center_jp.getWidth(), jf.getHeight());
 		 jpRight.setBackground(Color.decode("#FAFAFA"));
 		 jpRight.setLocation((left_jp.getWidth() + center_jp.getWidth()), 0);
+		 jpRight.setVisible(false);
 
 		 //聊天界面上方区域START
 		 JPanel jpTop    = new JPanel();
 
 		 jpTop.setLayout(null);
 		 jpTop.setLocation(0, 0);
-		 jpTop.setSize(jpRight.getWidth(), 80);
+		 jpTop.setSize(jpRight.getWidth(), 80); 
 		 jpTop.setBackground(Color.decode("#FAFAFA"));
 		 jpTop.setBorder(BorderFactory.createEtchedBorder());
 
@@ -658,24 +663,53 @@ public class loginFrame extends Frame
 
 		 allMsgJPanel.setLayout(null);
 		 allMsgJPanel.setBackground(Color.decode("#FAFAFA"));
-		 allMsgJPanel.setPreferredSize(new Dimension(JScrollPane.getWidth() - 20, jpCenter.getHeight() * 2));
+		 allMsgJPanel.setPreferredSize(new Dimension(JScrollPane.getWidth() - 20, jpCenter.getHeight()));
 
-		 JLabel jlabel = new JLabel("一二三四五一二三四五12");
-
-		 jlabel.setSize(jlabel.getText().length() * 13, 30);
-		 jlabel.setOpaque(true);
-		 jlabel.setBackground(Color.decode("#FFFFFF"));
-		 jlabel.setLocation(10,10);
-
-		 allMsgJPanel.add(jlabel);
 		 jpCenter.add(JScrollPane);
 
-		 JPanel jpBottom = new JPanel();
-
+//		 JPanel jpBottom = new JPanel();
+		 
 		 jpRight.add(jpTop);
 		 jpRight.add(jpCenter);
+		 
+		 getdata.getChatJPanel().setJpRight(jpRight);
+		 getdata.getChatJPanel().setAllMsgJPanel(allMsgJPanel);
 
 		 return jpRight;
+	}
+	
+	//循环向聊天界面添加所有聊天信息
+	public void addAllMsg(getData getdata)
+	{
+		
+		for(int i = 0; i < getdata.getContactDataClick().getChatContent().size();i++)
+		{
+
+			//添加联系人头像
+			 myPanel img = new myPanel(getdata.getimg(getdata.getContactDataClick().getChatContent().get(i).getHeadImgUrl(), 0), 30, 30);
+
+			 img.setLocation(10, 10);
+			 
+
+			 JLabel jlabel = new JLabel(getdata.getContactDataClick().getChatContent().get(i).getContent());
+
+			 jlabel.setSize(jlabel.getText().length() * 13, 30);
+			 jlabel.setOpaque(true);
+			 jlabel.setBackground(Color.decode("#FFFFFF"));
+			 jlabel.setLocation(img.getX() * 4 + img.getWidth(), 10);
+
+			 //添加聊天框向右小三角
+			 myPanel sj = new myPanel(getdata.getimg(getData.PROJECTPATH + "/images/rightSJ.gif", 1), 20, 10);
+
+			 //设置聊天框向右小三角的位置
+			 sj.setLocation(jlabel.getX() - sj.getWidth(), 16);
+
+			 getdata.getChatJPanel().getAllMsgJPanel().add(sj);		//向聊天面板中添加小三角
+			 getdata.getChatJPanel().getAllMsgJPanel().add(img);	//向聊天面板中添加头像
+			 getdata.getChatJPanel().getAllMsgJPanel().add(jlabel);	//向聊天面板中添加聊天内容
+		}
+		
+		
 	}
 
 	/**
