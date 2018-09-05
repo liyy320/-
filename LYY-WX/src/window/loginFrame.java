@@ -31,7 +31,6 @@ public class loginFrame extends Frame
 	 */
 	private static final long serialVersionUID = 1L;
 	
-
 	/**
 	 * 创建界面的方法
 	 * 
