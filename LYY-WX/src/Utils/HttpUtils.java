@@ -173,10 +173,10 @@ public class HttpUtils
 	        System.out.println(sb);
 	        
 	        System.out.println("---------------------------------------");
-	        
+
 	        br.close();
 	        connection.disconnect();
-			
+	
 		}
 		catch (Exception e)
 		{
@@ -207,7 +207,7 @@ public class HttpUtils
 	        writer.close();
 
 	        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	        
+
 	        System.out.println("java∑¢ÀÕhttp«Î«Û----------------------");
             System.out.println("URL£∫");
             System.out.println(connect);

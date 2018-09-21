@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import bean.AddMsgBean;
 import bean.ContactBean;
 
 public class loginFrame extends Frame
@@ -294,7 +295,7 @@ public class loginFrame extends Frame
 						getdata.getChatJPanel().getJpRight().setVisible(true);
 						getdata.getChatJPanel().getJlNickName().setText(getdata.getContatInfo().getContactList().get(index).getNickName());
 						getdata.getContatInfo().setContactJPanelClick(contact_jp);getdata.setContactDataClick(getdata.getContatInfo().getContactList().get(index));
-						
+
 						addAllMsg(getdata);
 					}
 				});
@@ -473,18 +474,22 @@ public class loginFrame extends Frame
 			 
 			 if(contactBean == null) {continue;}
 			 
-			 contactBean.getChatContent().add(getdata.getAddMsgList().get(i));
+			 AddMsgBean amb = getdata.getAddMsgList().get(i);
+			 
+			 amb.setHeadImgUrl(contactBean.getHeadImgUrl());
+			 
+			 contactBean.getChatContent().add(amb);
 
 			 JPanel contact_jp = new JPanel();
-			 
+
 			 contact_jp.setLayout(null);
 			 contact_jp.setSize(getdata.getContatInfo().getCenterJPanel().getWidth(), getdata.getContatInfo().getSearchJPanel().getHeight());
 			 contact_jp.setLocation(0, contact_jp_Y * contact_jp.getHeight() - (contact_jp_Y + 1) * contact_jp.getHeight());
-			 contact_jp.setBackground(Color.decode("#F2F2F2"));
+			 contact_jp.setBackground(Color.decode("#BDBDBD"));
 
 			 //添加联系人头像
 			 myPanel img = new myPanel(getdata.getimg(contactBean.getHeadImgUrl(), 0), 45, 45);
-	
+
 			 img.setLocation(10, 25);
 
 			 //添加昵称
@@ -493,7 +498,7 @@ public class loginFrame extends Frame
 			 nickName.setFont(new Font("宋体", 0, 14));
 			 nickName.setSize(130,20);
 			 nickName.setLocation(img.getX() * 2 + img.getWidth(), 25);
-			 
+
 			 //添加消息发送的日期
 			 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");  
 			 
@@ -545,7 +550,7 @@ public class loginFrame extends Frame
 					getdata.getChatJPanel().getJpRight().setVisible(true);
 					getdata.getChatJPanel().getJlNickName().setText(contactBean.getNickName());
 					getdata.getContatInfo().setContactJPanelClick(contact_jp);
-					getdata.setContactDataClick(getdata.getContatInfo().getContactList().get(index));
+					getdata.setContactDataClick(contactBean);
 
 					addAllMsg(getdata);
 				}
@@ -568,6 +573,8 @@ public class loginFrame extends Frame
 			 }
 				 
 		}
+		
+		addAllMsg(getdata);
 		
 	}
 	
@@ -672,6 +679,7 @@ public class loginFrame extends Frame
 		 jpRight.add(jpCenter);
 		 
 		 getdata.getChatJPanel().setJpRight(jpRight);
+		 getdata.getChatJPanel().setjScrollPane(JScrollPane);
 		 getdata.getChatJPanel().setAllMsgJPanel(allMsgJPanel);
 
 		 return jpRight;
@@ -681,13 +689,18 @@ public class loginFrame extends Frame
 	public void addAllMsg(getData getdata)
 	{
 		
+		int preY = 0;
+		int preHeight = 0;
+		
+		if(getdata.getContactDataClick() == null) {return;}
+		
 		for(int i = 0; i < getdata.getContactDataClick().getChatContent().size();i++)
 		{
 
 			//添加联系人头像
 			 myPanel img = new myPanel(getdata.getimg(getdata.getContactDataClick().getChatContent().get(i).getHeadImgUrl(), 0), 30, 30);
 
-			 img.setLocation(10, 10);
+			 img.setLocation(0 , 0);
 			 
 
 			 JLabel jlabel = new JLabel(getdata.getContactDataClick().getChatContent().get(i).getContent());
@@ -695,22 +708,35 @@ public class loginFrame extends Frame
 			 jlabel.setSize(jlabel.getText().length() * 13, 30);
 			 jlabel.setOpaque(true);
 			 jlabel.setBackground(Color.decode("#FFFFFF"));
-			 jlabel.setLocation(img.getX() * 4 + img.getWidth(), 10);
+			 jlabel.setLocation(55,  0);
 
 			 //添加聊天框向右小三角
-			 myPanel sj = new myPanel(getdata.getimg(getData.PROJECTPATH + "/images/rightSJ.gif", 1), 20, 10);
+			 myPanel sj = new myPanel(getdata.getimg(getData.PROJECTPATH + "/images/rightSJ.gif", 1), 15, 10);
 
 			 //设置聊天框向右小三角的位置
-			 sj.setLocation(jlabel.getX() - sj.getWidth(), 16);
+			 sj.setLocation(jlabel.getX() - sj.getWidth(), 12 );
+			 
+			 JPanel msgJPanel = new JPanel();
+				
+			 msgJPanel.setLayout(null);
+			 msgJPanel.setBackground(Color.decode("#FAFAFA"));
+			 msgJPanel.setSize(jlabel.getX() - img.getX() + jlabel.getWidth(), jlabel.getHeight());
+			 msgJPanel.setLocation(10, preY + preHeight + 10);
 
-			 getdata.getChatJPanel().getAllMsgJPanel().add(sj);		//向聊天面板中添加小三角
-			 getdata.getChatJPanel().getAllMsgJPanel().add(img);	//向聊天面板中添加头像
-			 getdata.getChatJPanel().getAllMsgJPanel().add(jlabel);	//向聊天面板中添加聊天内容
+			 msgJPanel.add(sj);
+			 msgJPanel.add(img);
+			 msgJPanel.add(jlabel);
+
+			 getdata.getChatJPanel().getAllMsgJPanel().add(msgJPanel);	//向聊天面板中添加聊天内容
+
+			 getdata.getChatJPanel().getjScrollPane().updateUI();
+			 
+			 preY = msgJPanel.getY();
+			 preHeight = msgJPanel.getHeight();
 		}
-		
-		
-	}
 
+	}
+  
 	/**
 	 * 
 	 * 创建一个画布

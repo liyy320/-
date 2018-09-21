@@ -2,11 +2,13 @@ package bean;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class ChatJPanelBean
 {
 	private JPanel jpRight;
 	private JLabel jlNickName;
+	private JScrollPane jScrollPane;
 	private JPanel allMsgJPanel;
 	
 	
@@ -34,6 +36,14 @@ public class ChatJPanelBean
 
 	public void setAllMsgJPanel(JPanel allMsgJPanel) {
 		this.allMsgJPanel = allMsgJPanel;
+	}
+
+	public JScrollPane getjScrollPane() {
+		return jScrollPane;
+	}
+
+	public void setjScrollPane(JScrollPane jScrollPane) {
+		this.jScrollPane = jScrollPane;
 	}
 	
 	
