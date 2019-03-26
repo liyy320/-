@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.security.shiro.session.SessionDAO;
@@ -74,7 +75,7 @@ public class LoginController extends BaseController{
 //		view += "jar:file:/D:/GitHub/jeesite/src/main/webapp/WEB-INF/lib/jeesite.jar!";
 //		view += "/"+getClass().getName().replaceAll("\\.", "/").replace(getClass().getSimpleName(), "")+"view/sysLogin";
 //		view += ".jsp";
-		return "modules/sys/sysLogin";
+		return "modules/sys/sysLogin/sysLogin_1";
 	}
 
 	/**
@@ -83,6 +84,8 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "${adminPath}/login", method = RequestMethod.POST)
 	public String loginFail(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
+		
+		JSONObject json = new JSONObject();
 		
 		// 如果已经登录，则跳转到管理首页
 		if(principal != null){
@@ -123,7 +126,10 @@ public class LoginController extends BaseController{
 	        return renderString(response, model);
 		}
 		
-		return "modules/sys/sysLogin";
+		json.put("msg", message);
+		json.put("Status", "error");
+		
+		return renderString(response, json.toString());
 	}
 
 	/**
@@ -133,6 +139,8 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "${adminPath}")
 	public String index(HttpServletRequest request, HttpServletResponse response) {
 		Principal principal = UserUtils.getPrincipal();
+		
+		JSONObject json = new JSONObject();
 
 		// 登录成功后，验证码计算器清零
 		isValidateCodeLogin(principal.getLoginName(), false, true);
@@ -180,6 +188,11 @@ public class LoginController extends BaseController{
 ////			request.getSession().setAttribute("aaa", "aa");
 ////		}
 //		System.out.println("==========================b");
+		
+		json.put("msg", principal.getLoginName() + ",欢迎进入！");
+		json.put("Status", "ok");
+		json.put("token", principal.getSessionid());
+		
 		return "modules/sys/sysIndex";
 	}
 	
