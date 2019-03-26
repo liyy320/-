@@ -160,10 +160,14 @@ public class LoginController extends BaseController{
 			}
 		}
 		
+		json.put("msg", principal.getLoginName() + ",欢迎进入！");
+		json.put("Status", "ok");
+		json.put("token", principal.getSessionid());
+		
 		// 如果是手机登录，则返回JSON字符串
 		if (principal.isMobileLogin()){
 			if (request.getParameter("login") != null){
-				return renderString(response, principal);
+				return renderString(response, json);
 			}
 			if (request.getParameter("index") != null){
 				return "modules/sys/sysIndex";
@@ -188,10 +192,6 @@ public class LoginController extends BaseController{
 ////			request.getSession().setAttribute("aaa", "aa");
 ////		}
 //		System.out.println("==========================b");
-		
-		json.put("msg", principal.getLoginName() + ",欢迎进入！");
-		json.put("Status", "ok");
-		json.put("token", principal.getSessionid());
 		
 		return "modules/sys/sysIndex";
 	}

@@ -2,7 +2,7 @@
 function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
     $.ajax({
         type: "post",
-        url: "http://127.0.0.1/MySpringMVC/" + Url,
+        url: "http://localhost/MySpringMVC/" + Url,
         data: JsonData,
         dataType: 'json',
         async: 'false',

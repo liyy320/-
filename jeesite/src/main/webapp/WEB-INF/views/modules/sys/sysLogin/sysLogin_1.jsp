@@ -166,7 +166,7 @@
 	                }, 500);
 
 	                //登陆
-	                var JsonData = { username: login, password: pwd, code: code };
+	                var JsonData = { username: login, password: pwd, code: code, mobileLogin : 1};
 					//此处做为ajax内部判断
 					var url = "";
 // 					if(JsonData.login == truelogin && JsonData.pwd == truepwd && JsonData.code.toUpperCase() == CodeVal.toUpperCase()){
@@ -177,6 +177,8 @@
 	                AjaxPost("a/login", JsonData, function () {},
 	                         function (data) {
 
+	                			console.log(data);
+	                	
 	                        	 data = JSON.parse(data);
 
 	                             //ajax返回 
@@ -203,7 +205,7 @@
 	                                     $('.success').fadeIn(1000);
 	                                     $('.success').html(data.msg); 
 	                                     //跳转操作
-	                                     window.location.href="http://localhost:80/MySpringMVC/views/modules/sys/sysIndex.jsp";
+	                                     window.location.href="http://127.0.0.1:80/MySpringMVC";
 	                                     
 
 	                                 } else {
