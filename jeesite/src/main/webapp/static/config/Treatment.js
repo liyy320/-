@@ -2,7 +2,7 @@
 function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
     $.ajax({
         type: "post",
-        url: "http://localhost/MySpringMVC/" + Url,
+        url: IP_URL + Url,
         data: JsonData,
         dataType: 'json',
         async: 'false',
@@ -24,7 +24,6 @@ function ErroAlert(e) {
 function AjaxErro(e) {
     ErroAlert(e.msg);
 }
-
 
 //生成验证码
 var code = "";

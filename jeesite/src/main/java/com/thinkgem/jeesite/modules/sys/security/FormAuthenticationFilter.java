@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.sys.security;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,7 +15,10 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.security.SystemAuthorizingRealm.Principal;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 表单验证（包含验证码）过滤类
@@ -108,11 +112,31 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 	}
 	
 	@Override
-	protected void issueSuccessRedirect(ServletRequest request,
-			ServletResponse response) throws Exception {
-//		Principal p = UserUtils.getPrincipal();
-//		if (p != null && !p.isMobileLogin()){
-			 WebUtils.issueRedirect(request, response, getSuccessUrl(), null, true);
+	protected void issueSuccessRedirect(ServletRequest request, ServletResponse response) throws Exception {
+
+		Principal principal = UserUtils.getPrincipal();
+		JSONObject json = new JSONObject();
+
+		if(principal.isMobileLogin()) {
+			
+			json.put("msg", principal.getLoginName() + ",欢迎进入！");
+			json.put("Status", "ok");
+			json.put("token", principal.getSessionid());
+			
+			HttpServletResponse r = (HttpServletResponse)response;
+			
+			r.reset();
+	        r.setContentType("application/json");
+	        r.setCharacterEncoding("utf-8");
+	        r.addHeader("Access-Control-Allow-Origin", "*");
+			r.getWriter().print(json);
+			
+		} else {
+
+			WebUtils.issueRedirect(request, response, getSuccessUrl(), null, true);
+		}
+		
+			 
 //		}else{
 //			super.issueSuccessRedirect(request, response);
 //		}

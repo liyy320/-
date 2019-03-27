@@ -1,0 +1,1 @@
+﻿var IP_URL = "http://localhost/MySpringMVC/";

@@ -152,15 +152,13 @@ public class LoginController extends BaseController{
 	public String index(HttpServletRequest request, HttpServletResponse response) {
 		Principal principal = UserUtils.getPrincipal();
 		
-		JSONObject json = new JSONObject();
-
 		// 登录成功后，验证码计算器清零
 		isValidateCodeLogin(principal.getLoginName(), false, true);
 		
 		if (logger.isDebugEnabled()){
 			logger.debug("show index, active session size: {}", sessionDAO.getActiveSessions(false).size());
 		}
-		
+
 		// 如果已登录，再次访问主页，则退出原账号。
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){
 			String logined = CookieUtils.getCookie(request, "LOGINED");
@@ -172,20 +170,11 @@ public class LoginController extends BaseController{
 			}
 		}
 		
-		json.put("msg", principal.getLoginName() + ",欢迎进入！");
-		json.put("Status", "ok");
-		json.put("token", principal.getSessionid());
-		
-		// 如果是手机登录，则返回JSON字符串
-		if (principal.isMobileLogin()){
-			if (request.getParameter("login") != null){
-				return renderString(response, json);
-			}
-			if (request.getParameter("index") != null){
-				return "modules/sys/sysIndex";
-			}
-			return "redirect:" + adminPath + "/login";
-		}
+//		// 如果是手机登录，则返回JSON字符串
+//		if (principal.isMobileLogin()){
+//
+//			return renderString(response, json);
+//		}
 		
 //		// 登录成功后，获取上次登录的当前站点ID
 //		UserUtils.putCache("siteId", StringUtils.toLong(CookieUtils.getCookie(request, "siteId")));

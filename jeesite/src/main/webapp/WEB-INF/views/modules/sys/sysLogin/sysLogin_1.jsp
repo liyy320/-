@@ -68,12 +68,13 @@
 	</div>
 	<div class="OverWindows"></div>
     <link href="${ctxStatic}/layui/css/layui.css" rel="stylesheet" type="text/css" />
+    <script src="${ctxStatic}/config/Global.js"></script>
+    <script src="${ctxStatic}/config/Treatment.js" type="text/javascript"></script>
 	<script src="${ctxStatic}/jquery/jquery-2.1.1.min.js"></script>
 	<script src="${ctxStatic}/jquery-ui/jquery-ui.min.js" type="text/javascript" ></script>
 	<script src='${ctxStatic}/login/sysLogin_1/js/stopExecutionOnTimeout.js?t=1' type="text/javascript" ></script>
     <script src="${ctxStatic}/layui/layui.js" type="text/javascript"></script>
     <script src="${ctxStatic}/login/sysLogin_1/js/Particleground.js" type="text/javascript"></script>
-    <script src="${ctxStatic}/login/sysLogin_1/js/Treatment.js" type="text/javascript"></script>
     <script src="${ctxStatic}/jquery-ui/jquery.mockjax.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
@@ -140,15 +141,23 @@
 	            var login = $('input[name="login"]').val();
 	            var pwd = $('input[name="pwd"]').val();
 	            var code = $('input[name="code"]').val();
+	            
+	            console.log(code);
+	            
+	            console.log(CodeVal);
+	            
 	            if (login == '') {
 	                ErroAlert('请输入您的账号');
 	            } else if (pwd == '') {
 	                ErroAlert('请输入密码');
-// 	            } else if (code == '' || code.length != 4) {
-// 	                ErroAlert('输入验证码');
+	            } else if (code == '' || code.length != 4) {
+	                ErroAlert('输入验证码');
+	            } else if(code.toUpperCase() != CodeVal.toUpperCase()){
+					ErroAlert('验证码输入有误！');
 	            } else {
+	            	
 	                //认证中..
-	                fullscreen();
+// 	                fullscreen();
 	                $('.login').addClass('test'); //倾斜特效
 	                setTimeout(function () {
 	                    $('.login').addClass('testtwo'); //平移特效
@@ -167,12 +176,6 @@
 
 	                //登陆
 	                var JsonData = { username: login, password: pwd, code: code, mobileLogin : 1};
-					//此处做为ajax内部判断
-					var url = "";
-// 					if(JsonData.login == truelogin && JsonData.pwd == truepwd && JsonData.code.toUpperCase() == CodeVal.toUpperCase()){
-						url = "";
-// 					}
-					
 					
 	                AjaxPost("a/login", JsonData, function () {},
 	                         function (data) {
@@ -201,8 +204,7 @@
 	                                     $('.success').fadeIn(1000);
 	                                     $('.success').html(data.msg); 
 	                                     //跳转操作
-	                                     window.location.href="http://127.0.0.1:80/MySpringMVC";
-	                                     
+	                                     window.location.href = IP_URL + "a";
 
 	                                 } else {
 	                                     AjaxErro(data);
