@@ -157,6 +157,7 @@ public abstract class BaseController {
 			response.reset();
 	        response.setContentType(type);
 	        response.setCharacterEncoding("utf-8");
+	        response.addHeader("Access-Control-Allow-Origin", "*");
 			response.getWriter().print(string);
 			return null;
 		} catch (IOException e) {

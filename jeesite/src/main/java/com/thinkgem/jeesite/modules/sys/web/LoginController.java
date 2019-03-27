@@ -49,6 +49,8 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "${adminPath}/login", method = RequestMethod.GET)
 	public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
+		
+		JSONObject json = new JSONObject();
 
 //		// 默认页签模式
 //		String tabmode = CookieUtils.getCookie(request, "tabmode");
@@ -67,7 +69,12 @@ public class LoginController extends BaseController{
 		
 		// 如果已经登录，则跳转到管理首页
 		if(principal != null && !principal.isMobileLogin()){
-			return "redirect:" + adminPath;
+			
+			json.put("msg", principal.getLoginName() + ",欢迎进入！");
+			json.put("Status", "ok");
+			json.put("token", principal.getSessionid());
+			
+			renderString(response, json);
 		}
 //		String view;
 //		view = "/WEB-INF/views/modules/sys/sysLogin.jsp";
@@ -89,7 +96,12 @@ public class LoginController extends BaseController{
 		
 		// 如果已经登录，则跳转到管理首页
 		if(principal != null){
-			return "redirect:" + adminPath;
+
+			json.put("msg", principal.getLoginName() + ",欢迎进入！");
+			json.put("Status", "ok");
+			json.put("token", principal.getSessionid());
+			
+			return renderString(response, json);
 		}
 
 		String username = WebUtils.getCleanParam(request, FormAuthenticationFilter.DEFAULT_USERNAME_PARAM);
@@ -129,7 +141,7 @@ public class LoginController extends BaseController{
 		json.put("msg", message);
 		json.put("Status", "error");
 		
-		return renderString(response, json.toString());
+		return renderString(response, json);
 	}
 
 	/**

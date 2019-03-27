@@ -23,7 +23,7 @@
 	      <div class='icon'>
 	        <img alt="" src='img/user_icon_copy.png'>
 	      </div>
-	      <input name="login" placeholder='用户名' maxlength="16" type='text' autocomplete="off" value="kbcxy"/>
+	      <input name="login" placeholder='用户名' maxlength="16" type='text' autocomplete="off" value="liyuan"/>
 	        <div class='validation'>
 	          <img alt="" src='img/tick.png'>
 	        </div>
@@ -32,7 +32,7 @@
 	      <div class='icon'>
 	        <img alt="" src='img/lock_icon_copy.png'>
 	      </div>
-	      <input name="pwd" placeholder='密码' maxlength="16" type='text' autocomplete="off">
+	      <input name="pwd" placeholder='密码' maxlength="16" type='text' autocomplete="off" value="admin">
 	      <div class='validation'>
 	        <img alt="" src='img/tick.png'>
 	      </div>
@@ -176,10 +176,6 @@
 					
 	                AjaxPost("a/login", JsonData, function () {},
 	                         function (data) {
-
-	                			console.log(data);
-	                	
-	                        	 data = JSON.parse(data);
 
 	                             //ajax返回 
 	                             //认证完成
