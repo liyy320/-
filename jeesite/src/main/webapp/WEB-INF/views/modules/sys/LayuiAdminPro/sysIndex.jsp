@@ -59,8 +59,7 @@
   </div>
   
   <div class="layui-footer">
-    <!-- 底部固定区域 -->
-    © layui.com - 底部固定区域
+   <script type="text/javascript" src="${ctxStatic}/Time/clock.js"></script>
   </div>
 </div>
 <script src="${ctxStatic}/vue/vue.min.js" type="text/javascript"></script>
