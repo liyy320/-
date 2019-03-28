@@ -74,7 +74,7 @@ public class LoginController extends BaseController{
 			json.put("Status", "ok");
 			json.put("token", principal.getSessionid());
 			
-			renderString(response, json);
+			return renderString(response, json);
 		}
 //		String view;
 //		view = "/WEB-INF/views/modules/sys/sysLogin.jsp";
@@ -194,7 +194,7 @@ public class LoginController extends BaseController{
 ////		}
 //		System.out.println("==========================b");
 		
-		return "modules/sys/sysLayuiJsp/sysIndex";
+		return "modules/sys/LayuiAdminPro/sysIndex";
 	}
 	
 	/**

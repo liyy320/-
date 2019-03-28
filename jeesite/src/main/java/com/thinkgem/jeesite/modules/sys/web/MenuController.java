@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.sys.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -49,13 +51,15 @@ public class MenuController extends BaseController {
 	}
 
 	@RequiresPermissions("sys:menu:view")
-	@RequestMapping(value = {"list", ""})
-	public String list(Model model) {
+	@RequestMapping(value = {"list", ""}, method = {RequestMethod.POST, RequestMethod.GET})
+	public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
 		List<Menu> list = Lists.newArrayList();
 		List<Menu> sourcelist = systemService.findAllMenu();
 		Menu.sortList(list, sourcelist, Menu.getRootId(), true);
         model.addAttribute("list", list);
-		return "modules/sys/menuList";
+//		return "modules/sys/menuList";
+        
+        return renderString(response, model);
 	}
 
 	@RequiresPermissions("sys:menu:view")

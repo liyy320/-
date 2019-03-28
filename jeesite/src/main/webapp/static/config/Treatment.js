@@ -1,4 +1,6 @@
-﻿//Ajax提交
+﻿//document.write("<script language=javascript src='/MySpringMVC/static/layui/layui.all.js'></script>");
+
+//Ajax提交
 function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
     $.ajax({
         type: "post",
@@ -12,12 +14,43 @@ function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
     });
 }
 
+//用VUE发送get请求(不带参数)
+function VueGet(Self, Url, SuccessFun, ErrorFun){
+
+	Self.$http.get(IP_URL + Url).then(SuccessFun, ErrorFun);
+}
+
+////用VUE发送get请求(带参数)
+//function VueGet(Self, Url, Params, SuccessFun, ErrorFun){
+//
+//	Self.$http.get(IP_URL + Url, {params : Params}).then(SuccessFun,ErrorFun);
+//}
+
+/**
+ * 用VUE发送get请求(带参数)
+ * 
+ * self:this
+ * url:路径
+ * params：参数 JSON格式
+ * emulateJSON：如果后端不能解析json，则为true，否则为false
+ * 
+ * */
+function VuePost(Self, Url, Params, emulateJSON, SuccessFun, ErrorFun){
+
+	Self.$http.get(IP_URL + Url, Params, {emulateJSON:emulateJSON}).then(SuccessFun,ErrorFun);
+}
+
 //弹出
 function ErroAlert(e) {
-    var index = layer.alert(e, { icon: 5, time: 2000, offset: 't', closeBtn: 0, title: '错误信息', btn: [], anim: 2, shade: 0 });
-    layer.style(index, {
-        color: '#777'
-    }); 
+	
+	layui.use(['layer'], function(){
+		
+		var layer = layui.layer;
+
+	 	var index = layer.alert(e, { icon: 5, time: 2000, offset: 't', closeBtn: 0, title: '错误信息', btn: [], anim: 2, shade: 0 });
+	    layer.style(index, {color: '#777'});
+	});
+	
 }
 
 //Ajax 错误返回处理

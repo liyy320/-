@@ -153,10 +153,10 @@
 	                ErroAlert('请输入您的账号');
 	            } else if (pwd == '') {
 	                ErroAlert('请输入密码');
-	            } else if (code == '' || code.length != 4) {
-	                ErroAlert('输入验证码');
-	            } else if(code.toUpperCase() != CodeVal.toUpperCase()){
-					ErroAlert('验证码输入有误！');
+// 	            } else if (code == '' || code.length != 4) {
+// 	                ErroAlert('输入验证码');
+// 	            } else if(code.toUpperCase() != CodeVal.toUpperCase()){
+// 					ErroAlert('验证码输入有误！');
 	            } else {
 	            	
 	                //认证中..
