@@ -3,7 +3,7 @@
 ******************************************************************************/
 var swfUrl = "clock.swf";
 
-var swfTitle = "honehoneclock";
+var swfTitle = "a";
 
 // s
 LoadBlogParts();
@@ -22,7 +22,7 @@ function LoadBlogParts(){
 	sHtml += '<param name="quality" value="high" />';
 	sHtml += '<param name="bgcolor" value="#ffffff" />';
 	sHtml += '<param name="wmode" value="transparent" />';
-	sHtml += '<embed wmode="transparent" src="static/Time/' + sUrl + '" quality="high" bgcolor="#ffffff" width="220" height="100" name="' + swfTitle + '" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
+	sHtml += '<embed wmode="transparent" src="static/Time/' + sUrl + '" quality="high" bgcolor="#ffffff" width="220" height="50" name="' + swfTitle + '" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
 	sHtml += '</object>';
 	
 	document.write(sHtml);

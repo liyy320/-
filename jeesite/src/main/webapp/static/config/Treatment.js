@@ -1,4 +1,10 @@
-﻿//document.write("<script language=javascript src='/MySpringMVC/static/layui/layui.all.js'></script>");
+﻿
+var STATIC_URL = "static/";
+
+document.write("<script src= 'static/config/Global.js' type='text/javascript'></script>");
+document.write("<script src= " + STATIC_URL + "vue/vue.min.js type='text/javascript'></script>");
+document.write("<script src= " + STATIC_URL + "vue/vue-resource.min.js type='text/javascript'></script>");
+document.write("<script src= " + STATIC_URL + "layui/layui.js type='text/javascript'></script>");
 
 //Ajax提交
 function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {

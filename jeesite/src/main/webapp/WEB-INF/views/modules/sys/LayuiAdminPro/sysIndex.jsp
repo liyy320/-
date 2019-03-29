@@ -31,7 +31,7 @@
   <div class="layui-side layui-bg-black">
     <div class="layui-side-scroll">
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-      <ul class="layui-nav layui-nav-tree layui-bg-cyan">
+      <ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline">
         <li class="layui-nav-item layui-nav-itemed" v-for="li in menuList" v-if="li.parentId == currentTopMenuId && li.isShow === '1' && !li.href">
           <a class="" href="javascript:;">{{ li.name }}</a>
           <dl class="layui-nav-child">
@@ -45,16 +45,18 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 0px;">
-	<div class="layui-tab layui-tab-card" lay-allowClose="true" style="height:99.5%;margin:0px;">
-		  <ul class="layui-tab-title">
-			    <li v-for="tab in tabElement" :class="tab.li_clas">{{ tab.name }}</li>
-		  </ul>
-		  <div class="layui-tab-content" style="padding:5px;">
-			    <div v-for="tab in tabElement" :class="tab.div_clas">
-			    	<iframe  :src="'${ctx}' + tab.href" style="margin:0;border-width:0px;height:92%;width:100%;"></iframe>
-			    </div>
-		  </div>
-	</div>
+		<div class="layui-tab layui-tab-card" lay-allowClose="false" style="height:99.5%;margin:0px;">
+			  <ul class="layui-tab-title">
+				    <li v-for="tab in tabElement" :id="'li_' + tab.id" class="layui-this">{{ tab.name }}
+<!-- 				    	<i class="layui-icon layui-unselect layui-tab-close">ဆ</i> -->
+					</li>
+			  </ul>
+			  <div class="layui-tab-content" style="padding:5px;">
+				    <div v-for="tab in tabElement" :id="'div_' + tab.id" class="layui-tab-item layui-show">
+				    	<iframe  :src="'${ctx}' + tab.href" style="margin:0;border-width:0px;height:92%;width:100%;"></iframe>
+				    </div>
+			  </div>
+		</div>
 	</div>
   </div>
   
@@ -62,11 +64,7 @@
    <script type="text/javascript" src="${ctxStatic}/Time/clock.js"></script>
   </div>
 </div>
-<script src="${ctxStatic}/vue/vue.min.js" type="text/javascript"></script>
-<script src="${ctxStatic}/vue/vue-resource.min.js" type="text/javascript"></script>
-<script src="${ctxStatic}/config/Global.js" type="text/javascript"></script>
 <script src="${ctxStatic}/config/Treatment.js" type="text/javascript"></script>
-<script src="${ctxStatic}/layui/layui.js" type="text/javascript"></script>
 <script>
 //JavaScript代码区域
 
@@ -82,11 +80,13 @@ window.onload = function(){
         },
         mounted:function(){
 
-        	layui.use(['element'], function(){var element = layui.element;});
-        	
-        	VueGet(this, "a/sys/menu/list", this.initMenu, function(data){AjaxErro(data.msg)});
         },
         created:function(){
+        	
+			layui.use(['element'], function(){var element = layui.element;});
+        	
+        	// 获取菜单的数据
+        	VueGet(this, "a/sys/menu/list", this.initMenu, function(data){AjaxErro(data.msg)});
         	
         },
         methods:{
@@ -103,30 +103,32 @@ window.onload = function(){
         		
         		// 循环遍历当前菜单是否已经被打开
       			for(var i = 0; i < this.tabElement.length; i++){
-         				
+      				
+      				// 获取标签页的元素
+      				var li = document.getElementById("li_" + this.tabElement[i].id);
+      				var div = document.getElementById("div_" + this.tabElement[i].id);
+         			
+      				// 跳转到当前点击的菜单的页面
        				if(element.id == this.tabElement[i].id){
-
-       					this.tabElement[i]["li_clas"] = "layui-this";
-       					this.tabElement[i]["div_clas"] = "layui-tab-item layui-show";
+       					
+       					li.setAttribute("class", "layui-this");
+       					div.setAttribute("class", "layui-tab-item layui-show");
        					
        					isExist = true;
-       				} else
-       				{
-       					this.tabElement[i]["li_clas"] = "";
-       					this.tabElement[i]["div_clas"] = "layui-tab-item";
+       				} else {
+       					
+       					li.setAttribute("class", "");
+       					div.setAttribute("class", "layui-tab-item");
+       					
        				}
          		}
         		
         		// 如果没有被打开则打开该菜单的页面
       			if(!isExist){
 
-      				element["li_clas"] = "layui-this";
-      				element["div_clas"] = "layui-tab-item layui-show";
-      				
       				this.tabElement.push(element);
+      				
       			}
-        		
-      			this.tabElement = this.tabElement;
         		
         	}
         	

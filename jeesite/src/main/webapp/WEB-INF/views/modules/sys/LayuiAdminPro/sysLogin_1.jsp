@@ -48,7 +48,6 @@
 	    </div>
 	    <div class='login_fields__submit'>
 	      <input type='button' value='登录'>
-	      <span id="qqLoginBtn"></span>
 	    </div>
 	  </div>
 	  <div class='success'>
@@ -77,13 +76,8 @@
     <script src="${ctxStatic}/login/sysLogin_1/layui/layui.js" type="text/javascript"></script>
     <script src="${ctxStatic}/login/sysLogin_1/js/Particleground.js" type="text/javascript"></script>
     <script src="${ctxStatic}/jquery-ui/jquery.mockjax.js" type="text/javascript"></script>
-    <script src="${ctxStatic}/Tencent/qc_jssdk.js" type="text/javascript"  charset="utf-8" data-appid="APPID" data-redirecturi="REDIRECTURI"></script>
-    <script type="text/javascript">
-    	QC.Login({
-       		btnId:"qqLoginBtn"	//插入按钮的节点id
-		});
-	</script>
 	<script type="text/javascript">
+	
 		var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
 		var ajaxmockjax = 1;//是否启用虚拟Ajax的请求响 0 不启用  1 启用
 		
