@@ -3,6 +3,7 @@
 <html>
 <head>
   <title>${fns:getConfig('productName')}</title>
+
   <link href="${ctxStatic}/layui/css/layui.css" rel="stylesheet">
 </head>
 <body class="layui-layout-body">
@@ -94,7 +95,17 @@ window.onload = function(){
         	// 初始化菜单
         	initMenu:function(data){
         		
-        		this.menuList = data.body.list;
+        		var list = data.body.list;
+        		
+        		for(var i = 0; i < list.length; i++){
+        			
+        			if(list[i].isShow == "1"){
+        				
+        				this.menuList.push(list[i]);
+        			}
+        			
+        		}
+        		console.log(this.menuList);
         		
         	},
         	clickMenu:function(element){

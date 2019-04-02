@@ -82,7 +82,7 @@ public class LoginController extends BaseController{
 //		view += "jar:file:/D:/GitHub/jeesite/src/main/webapp/WEB-INF/lib/jeesite.jar!";
 //		view += "/"+getClass().getName().replaceAll("\\.", "/").replace(getClass().getSimpleName(), "")+"view/sysLogin";
 //		view += ".jsp";
-		return "modules/sys/LayuiAdminPro/sysLogin_1";
+		return "modules/Hui/sys/login";
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class LoginController extends BaseController{
 ////		}
 //		System.out.println("==========================b");
 		
-		return "modules/sys/LayuiAdminPro/sysIndex";
+		return "modules/Hui/sys/index";
 	}
 	
 	/**

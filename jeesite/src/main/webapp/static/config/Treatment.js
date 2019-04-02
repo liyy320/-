@@ -1,69 +1,83 @@
 ﻿
-var STATIC_URL = "static/";
+/*********************定义全局变量****************/
+var IP_URL = "http://localhost/MySpringMVC/"; //访问后台ip地址
+var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
 
-document.write("<script src= 'static/config/Global.js' type='text/javascript'></script>");
-document.write("<script src= " + STATIC_URL + "vue/vue.min.js type='text/javascript'></script>");
-document.write("<script src= " + STATIC_URL + "vue/vue-resource.min.js type='text/javascript'></script>");
-document.write("<script src= " + STATIC_URL + "layui/layui.js type='text/javascript'></script>");
+/*********************发送Http请求****************/
 
-//Ajax提交
-function AjaxPost(Url,JsonData,LodingFun,ReturnFun) {
-    $.ajax({
-        type: "post",
-        url: IP_URL + Url,
-        data: JsonData,
-        dataType: 'json',
-        async: 'false',
-        beforeSend: LodingFun,
-        error: function () { AjaxErro({ "Status": "Erro", "Erro": "500" }); },
-        success: ReturnFun
-    });
+function httpGet(url, callback){
+	
+	$.get(IP_URL + url, callback);
 }
 
-//用VUE发送get请求(不带参数)
-function VueGet(Self, Url, SuccessFun, ErrorFun){
-
-	Self.$http.get(IP_URL + Url).then(SuccessFun, ErrorFun);
+function httpAjaxGet(url, async, callback){
+	
+	jQuery.ajax({
+		url  : IP_URL + url,
+		type : "GET",
+		async : async,
+		dataType: "json",
+		success : callback,
+		error : function(error){ErroAlert(error);}
+		
+	})
+	
 }
 
-////用VUE发送get请求(带参数)
-//function VueGet(Self, Url, Params, SuccessFun, ErrorFun){
-//
-//	Self.$http.get(IP_URL + Url, {params : Params}).then(SuccessFun,ErrorFun);
-//}
-
-/**
- * 用VUE发送get请求(带参数)
- * 
- * self:this
- * url:路径
- * params：参数 JSON格式
- * emulateJSON：如果后端不能解析json，则为true，否则为false
- * 
- * */
-function VuePost(Self, Url, Params, emulateJSON, SuccessFun, ErrorFun){
-
-	Self.$http.get(IP_URL + Url, Params, {emulateJSON:emulateJSON}).then(SuccessFun,ErrorFun);
+function httpPost(url, data, callback){
+	
+	$.post(IP_URL + url, data, callback);
 }
 
-//弹出
+/*********************操作html****************/
+function getInputValByName(name){
+	
+	return $('input[name="' + name + '"]').val();
+}
+
+function setInputValByName(name, value){
+	
+	return $('input[name="' + name + '"]').val(value);
+}
+
+/*********************弹框****************/
+
+//弹出填充满屏幕的窗口
+function openAlert(title, area, content){
+	layer.open({
+		type: 1,
+		title: title,
+		area: area, //['300px','200px'],
+		fix: false, //不固定
+		maxmin: true,
+		shade:0.4,
+		content: content
+	});
+}
+
+//弹出填充满屏幕的窗口
+function fullAlert(title, url){
+	
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+
+	layer.full(index);
+}
+
+//弹出错误框
 function ErroAlert(e) {
 	
-	layui.use(['layer'], function(){
-		
-		var layer = layui.layer;
+	var layer = layui.layer;
 
-	 	var index = layer.alert(e, { icon: 5, time: 2000, offset: 't', closeBtn: 0, title: '错误信息', btn: [], anim: 2, shade: 0 });
-	    layer.style(index, {color: '#777'});
-	});
+ 	var index = layer.alert(e, { icon: 5, time: 2000, offset: 't', closeBtn: 0, title: '错误信息', btn: [], anim: 2, shade: 0 });
+    layer.style(index, {color: '#777'});
 	
 }
 
-//Ajax 错误返回处理
-function AjaxErro(e) {
-    ErroAlert(e.msg);
-}
-
+/*********************生成验证码****************/
 //生成验证码
 var code = "";
 function createCode(e) {
