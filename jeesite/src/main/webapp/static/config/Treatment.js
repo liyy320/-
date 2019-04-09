@@ -42,16 +42,17 @@ function setInputValByName(name, value){
 
 /*********************弹框****************/
 
-//弹出填充满屏幕的窗口
-function openAlert(title, area, content){
+//弹出窗口
+function openAlert(title, area, url){
 	layer.open({
-		type: 1,
+		type: 2,
 		title: title,
 		area: area, //['300px','200px'],
 		fix: false, //不固定
 		maxmin: true,
-		shade:0.4,
-		content: content
+		shade:0,
+		content: url,
+		btnAlign : 'l',
 	});
 }
 
@@ -119,7 +120,7 @@ function getCookieValue(name) {
     //查找名为name的cookie的开始位置     
     name += "=";
     var pos = allcookies.indexOf(name);
-    //如果找到了具有该名字的cookie，那么提取并使用它的值     
+    //如果找到了具有该名字的cookie，那么提取并使用它的值
     if (pos != -1) {    //如果pos值为-1则说明搜索"version="失败     
         var start = pos + name.length;   //cookie值开始的位置     
         var end = allcookies.indexOf(";", start); //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置     
@@ -128,4 +129,15 @@ function getCookieValue(name) {
         return unescape(value);       //对它解码           
     }
     else return "-1";    //搜索失败，返回-1  
-}    
+}
+
+function urlFormat(url, data){
+	
+	var params = "";
+	
+	if(data != ""){
+		params = "&data=" + data;
+	}
+	
+	return IP_URL + "a/app/jump?URL=" + url + params;
+}

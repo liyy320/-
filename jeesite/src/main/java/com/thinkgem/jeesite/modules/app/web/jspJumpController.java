@@ -14,6 +14,10 @@ public class jspJumpController {
 	@RequestMapping(value = {"/", ""})
 	public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
+		System.out.println(request.getParameter("data"));
+		
+		model.addAttribute("data", request.getParameter("data"));
+		
 		return "modules/" + request.getParameter("URL");
 	}
 
