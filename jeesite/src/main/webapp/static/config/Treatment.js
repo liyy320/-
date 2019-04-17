@@ -52,7 +52,27 @@ function openAlert(title, area, url){
 		maxmin: true,
 		shade:0,
 		content: url,
-		btnAlign : 'l',
+		btnAlign : 'c',
+		btn: ['立即提交'],
+		yes:function(index, layero){
+			
+			$("#layui-layer-iframe" + index)[0].contentWindow.submit();
+			
+		}
+	});
+}
+
+//弹出无按钮窗口
+function openNoBtnAlert(title, area, url){
+	layer.open({
+		type: 2,
+		title: title,
+		area: area, //['300px','200px'],
+		fix: false, //不固定
+		maxmin: true,
+		shade:0,
+		content: url,
+		btnAlign : 'c',
 	});
 }
 
@@ -66,6 +86,26 @@ function fullAlert(title, url){
 	});
 
 	layer.full(index);
+}
+
+//弹出警告提示框
+function WarringAlert(e) {
+	
+	var layer = layui.layer;
+
+ 	var index = layer.alert(e, { icon: 7, time: 2000, offset: 't', closeBtn: 0, btn: [], anim: 2, shade: 0,title:false })
+    layer.style(index, {color: '#777'});
+	
+}
+
+//弹出友好提示框
+function MsgAlert(e) {
+	
+	var layer = layui.layer;
+
+ 	var index = layer.alert(e, { icon: 1, time: 2000, offset: 't', closeBtn: 0, btn: [], anim: 2, shade: 0,title:false })
+    layer.style(index, {color: '#777'});
+	
 }
 
 //弹出错误框
@@ -140,4 +180,26 @@ function urlFormat(url, data){
 	}
 	
 	return IP_URL + "a/app/jump?URL=" + url + params;
+}
+
+//比较两个json字符串是否相等（以ob1中的key为基础，ob1中没有的key不比较）
+function compareJSONObject(ob1, ob2){
+	
+	var rs = true;
+	
+	for (var key in ob1) {
+		
+		if(ob2[key] == undefined){ob2[key] = "";}
+		
+		if(ob1[key] != ob2[key]){
+			
+			console.log("ob1["+key+"] -- " + ob1[key])
+			console.log("ob2["+key+"] -- " + ob2[key])
+			
+			rs = false;
+		}
+		
+	}
+	
+	return rs;
 }

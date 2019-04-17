@@ -31,7 +31,7 @@
 						<li><a href="${ctx}/logout">退出</a></li>
 					</ul>	
 				</li>
-				<li id="Hui-msg"> <a href="${ctx}/oa/oaNotify/self" title="消息"><span class="badge badge-danger">9+</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
+				<li id="Hui-msg"> <a href="javascript:;" onclick="msgClick();" title="微信"><span class="badge badge-danger"></span><i class="Hui-iconfont" style="font-size:18px">&#xe694;</i></a> </li>
 				<li id="Hui-skin" class="dropDown right dropDown_hover"> <a href="javascript:;" class="dropDown_A" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
 					<ul class="dropDown-menu menu radius box-shadow">
 						<li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
@@ -184,6 +184,10 @@ function forEachMenu(parentId, list){
 	}
 	
 	return child;
+}
+
+function msgClick(){
+	openNoBtnAlert("微信", ['600px','500px'], urlFormat("app/layuiIMLogin", ""));
 }
 
 </script> 

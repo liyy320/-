@@ -28,7 +28,6 @@
 	</div>
 </div>
 <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.9.1.min.js"></script> 
-<script type="text/javascript" src="${ctxStatic}/layui/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="${ctxStatic}/config/Treatment.js"></script> 
 <script type="text/javascript" src="${ctxStatic}/layui/layui.js"></script>
 <script>
@@ -41,44 +40,45 @@ layui.config({
     var treetable = layui.treetable;
 });
 
+// 页面初始化JS
 $(function(){
 	
-	httpAjaxGet("a/sys/menu/list", false, function (data, status){initMenuList(data);});
+	initMenuList(); // 获取菜单列表
 	
 })
 
-
-
-function initMenuList(data){
-
-	var list = [];
+// 实例化菜单列表
+function initMenuList(){
 	
-	for(var i=0;i<data.list.length;i++){
+	httpAjaxGet("a/sys/menu/list", false, function (data, status){
+
+		var list = [];
 		
-		if(data.list[i].parentId == "1"){
+		for(var i=0;i<data.list.length;i++){
 			
-			data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge-rim layui-bg-blue'>目录</span></div>";
-		
-		}else if(data.list[i].isShow == "1"){
+			if(data.list[i].parentId == "1"){
+				
+				data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge-rim layui-bg-blue'>目录</span></div>";
 			
-			data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge layui-bg-gray'>菜单</span></div>";
-		}else{
+			}else if(data.list[i].isShow == "1"){
+				
+				data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge layui-bg-gray'>菜单</span></div>";
+			}else{
+				
+				data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge-rim'>按钮</span></div>";
+			}
 			
-			data.list[i].isShow = "<div class='layui-anim layui-anim-scale'><span class='layui-badge-rim'>按钮</span></div>";
+			list.push(data.list[i]);
+			
 		}
-		
-		var ico = "";
-		
-		if(data.list[i].icon != "" && data.list[i].icon != undefined){
 
-			ico = "<i class='Hui-iconfont'>" + data.list[i].icon + "</i>&nbsp;&nbsp;&nbsp;";
-		}
+		createTreeTable(list);
+	});
 
-		data.list[i].icoName = ico + data.list[i].name;
+}
 
-		list.push(data.list[i]);
-		
-	}
+// 生成树形表格
+function createTreeTable(list){
 
 	layui.use(['treetable', 'table'], function () {
 
@@ -96,7 +96,7 @@ function initMenuList(data){
 	        data: list,
 	        toolbar: "#headButton",
 	        cols: [[
-	            {field:'icoName', title:'菜单名称'},
+	            {field:'name', title:'菜单名称'},
 	            {field:'href', title:'菜单路径'},
 	            {field:'permission', title:'权限标识'},
 	            {field:'sort', title:'排序号', align:'center'},
@@ -115,7 +115,6 @@ function initMenuList(data){
 	    })
 		 
 	});
-
 }
 
 // 表格上方（全部展开|全部折叠）按钮的点击事件
@@ -145,7 +144,7 @@ function toolEditClick(obj){
 	
 	var data = obj.data;
 	
-	openAlert("【" + data.name + "】-- 菜单修改", ['1200px','800px'], urlFormat("Hui/sys/menuEdit", data.id));
+	openAlert("【" + data.name + "】-- 菜单修改", ['600px','500px'], urlFormat("Hui/sys/menuEdit", data.id));
 	
 }
 </script>

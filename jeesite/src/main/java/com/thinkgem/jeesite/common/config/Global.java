@@ -35,6 +35,14 @@ public class Global {
 	 * 当前对象实例
 	 */
 	private static Global global = null;
+	
+	//请求返回消息状态KEY
+	public static String MESSAGE = "message";
+	public static String STATUS  = "status";
+	
+	// 请求返回状态VALUE
+	public static String SUCCESS = "0";
+	public static String ERROR   = "1";
 
 	/**
 	 * 静态工厂方法 获取当前对象实例 多线程安全单例模式(使用双重同步锁)
@@ -202,5 +210,5 @@ public class Global {
 		}
 		return projectPath;
 	}
-
+	
 }

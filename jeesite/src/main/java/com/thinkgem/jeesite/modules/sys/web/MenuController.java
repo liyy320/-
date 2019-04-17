@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
@@ -27,7 +29,6 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Menu;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 菜单Controller
@@ -57,14 +58,16 @@ public class MenuController extends BaseController {
 		List<Menu> sourcelist = systemService.findAllMenu();
 		Menu.sortList(list, sourcelist, Menu.getRootId(), true);
         model.addAttribute("list", list);
-//		return "modules/sys/menuList";
         
         return renderString(response, model);
 	}
-
+	
 	@RequiresPermissions("sys:menu:view")
 	@RequestMapping(value = "form")
-	public String form(Menu menu, Model model) {
+	public String form(Menu menu, Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		JSONObject jsonObject = new JSONObject();
+		
 		if (menu.getParent()==null||menu.getParent().getId()==null){
 			menu.setParent(new Menu(Menu.getRootId()));
 		}
@@ -78,27 +81,33 @@ public class MenuController extends BaseController {
 				menu.setSort(list.get(list.size()-1).getSort() + 30);
 			}
 		}
-		model.addAttribute("menu", menu);
-		return "modules/sys/menuForm";
+
+		jsonObject.put("menu", menu);
+		jsonObject.put("parent", menu.getParent());
+
+		return renderString(response, jsonObject);
 	}
-	
+
+	@RequestMapping(value = {"parentList", ""}, method = {RequestMethod.POST, RequestMethod.GET})
+	public String formParentList(HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+        model.addAttribute("list", getChildsMenu(Menu.getRootId(), systemService.findAllMenu()));
+        
+        return renderString(response, model);
+	}
+
 	@RequiresPermissions("sys:menu:edit")
 	@RequestMapping(value = "save")
-	public String save(Menu menu, Model model, RedirectAttributes redirectAttributes) {
-		if(!UserUtils.getUser().isAdmin()){
-			addMessage(redirectAttributes, "越权操作，只有超级管理员才能添加或修改数据！");
-			return "redirect:" + adminPath + "/sys/role/?repage";
-		}
-		if(Global.isDemoMode()){
-			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/sys/menu/";
-		}
-		if (!beanValidator(model, menu)){
-			return form(menu, model);
-		}
+	public String save(Menu menu, HttpServletRequest request, HttpServletResponse response) {
+
+		JSONObject jsonObject = new JSONObject();
+		
 		systemService.saveMenu(menu);
-		addMessage(redirectAttributes, "保存菜单'" + menu.getName() + "'成功");
-		return "redirect:" + adminPath + "/sys/menu/";
+		
+		jsonObject.put(Global.STATUS, Global.SUCCESS);
+		jsonObject.put(Global.MESSAGE, "保存菜单'" + menu.getName() + "'成功");
+
+		return renderString(response, jsonObject);
 	}
 	
 	@RequiresPermissions("sys:menu:edit")
@@ -176,5 +185,29 @@ public class MenuController extends BaseController {
 			}
 		}
 		return mapList;
+	}
+	
+	public List<Map<String, Object>> getChildsMenu(String parentId, List<Menu> menuList){
+		
+		List<Map<String, Object>> list = Lists.newArrayList();
+		
+		for(Menu menu : menuList) {
+			
+			if(parentId.equals(menu.getParentId())) {
+
+				Map<String, Object> map = new HashMap<String, Object>();
+
+				map.put("id", menu.getId());
+				map.put("name", menu.getName());
+				map.put("alias", menu.getName());
+				map.put("spread", true);
+				map.put("children", getChildsMenu(menu.getId(), menuList));
+				
+				list.add(map);
+			}
+			
+		}
+		
+		return list;
 	}
 }
