@@ -39,7 +39,7 @@ public class ActUtils {
 	 * 组成结构：string[]{"流程标识","业务主表表名"}
 	 */
 	public static final String[] PD_LEAVE = new String[]{"leave", "oa_leave"};
-	public static final String[] PD_TEST_AUDIT = new String[]{"test_audit", "oa_test_audit"};
+	public static final String[] PD_TEST_AUDIT = new String[]{"process", "test_audit", "oa_test_audit"};
 	
 //	/**
 //	 * 流程定义Map（自动初始化）
@@ -131,7 +131,7 @@ public class ActUtils {
 		}else{
 			formUrl.append(formServerUrl);
 		}
-		
+
 		formUrl.append(formKey).append(formUrl.indexOf("?") == -1 ? "?" : "&");
 		formUrl.append("act.taskId=").append(act.getTaskId() != null ? act.getTaskId() : "");
 		formUrl.append("&act.taskName=").append(act.getTaskName() != null ? Encodes.urlEncode(act.getTaskName()) : "");

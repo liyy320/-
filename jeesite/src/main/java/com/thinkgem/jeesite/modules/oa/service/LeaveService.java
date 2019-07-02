@@ -89,9 +89,9 @@ public class LeaveService extends BaseService {
 		
 		// 启动流程
 		String businessKey = leave.getId().toString();
-		variables.put("type", "leave");
+		variables.put("type", "test_audit");
 		variables.put("busId", businessKey);
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActUtils.PD_LEAVE[0], businessKey, variables);
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(ActUtils.PD_TEST_AUDIT[1], businessKey, variables);
 		leave.setProcessInstance(processInstance);
 		
 		// 更新流程实例ID

@@ -53,7 +53,7 @@ public class TestAuditService extends CrudService<TestAuditDao, TestAudit> {
 			dao.insert(testAudit);
 			
 			// 启动流程
-			actTaskService.startProcess(ActUtils.PD_TEST_AUDIT[0], ActUtils.PD_TEST_AUDIT[1], testAudit.getId(), testAudit.getContent());
+			actTaskService.startProcess(ActUtils.PD_TEST_AUDIT[1], ActUtils.PD_TEST_AUDIT[2], testAudit.getId(), testAudit.getContent());
 			
 		}
 		

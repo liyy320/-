@@ -150,7 +150,7 @@ public class Act extends BaseEntity<Act> {
 		if (procIns != null && procIns.getBusinessKey() != null){
 			String[] ss = procIns.getBusinessKey().split(":");
 			setBusinessTable(ss[0]);
-			setBusinessId(ss[1]);
+			setBusinessId(ss[0]);
 		}
 	}
 

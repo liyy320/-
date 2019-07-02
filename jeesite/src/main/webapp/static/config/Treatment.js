@@ -1,6 +1,6 @@
 ﻿
 /*********************定义全局变量****************/
-var IP_URL = "http://localhost/MySpringMVC/"; //访问后台ip地址
+var IP_URL = "http://localhost:8080/MySpringMVC/"; //访问后台ip地址
 var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
 
 /*********************发送Http请求****************/

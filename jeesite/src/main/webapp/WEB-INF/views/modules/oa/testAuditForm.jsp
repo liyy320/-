@@ -4,26 +4,34 @@
 <head>
 	<title>审批管理</title>
 	<meta name="decorator" content="default"/>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#name").focus();
-			$("#inputForm").validate({
-				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
-				},
-				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
-					} else {
-						error.insertAfter(element);
-					}
+	
+<script type="text/javascript" src="/MySpringMVC/static/jquery-jbox/2.3/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="/MySpringMVC/static/jquery-jbox/2.3/jquery.jBox-2.3.min.js"></script>
+<script type="text/javascript" src="/MySpringMVC/static/jquery-jbox/2.3/i18n/jquery.jBox-zh-CN.js"></script>
+<script src="/MySpringMVC/static/jquery-validation/1.11.0/lib/jquery.js" type="text/javascript"></script>
+<script src="/MySpringMVC/static/jquery-validation/1.11.0/jquery.validate.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#name").focus();
+		$("#inputForm").validate({
+			submitHandler: function(form){
+				loading('正在提交，请稍等...');
+				form.submit();
+			},
+			errorContainer: "#messageBox",
+			errorPlacement: function(error, element) {
+				$("#messageBox").text("输入有误，请先更正。");
+				if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+					error.appendTo(element.parent().parent());
+				} else {
+					error.insertAfter(element);
 				}
-			});
+			}
 		});
-	</script>
+		
+	});
+</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -47,7 +55,8 @@
 						<sys:treeselect id="user" name="user.id" value="${testAudit.user.id}" labelName="user.name" labelValue="${testAudit.user.name}" 
 							title="用户" url="/sys/office/treeData?type=3" cssClass="required recipient" cssStyle="width:150px" 
 							allowClear="true" notAllowSelectParent="true" smallBtn="false"/>
-					</td><td class="tit">部门</td><td>
+					</td>
+					<td class="tit">部门</td><td>
 						<sys:treeselect id="office" name="office.id" value="${testAudit.office.id}" labelName="office.name" labelValue="${testAudit.office.name}" 
 							title="用户" url="/sys/office/treeData?type=2" cssClass="required recipient" cssStyle="width:150px" 
 							allowClear="true" notAllowSelectParent="true" smallBtn="false"/>

@@ -68,7 +68,7 @@
 		
 		Code();
 		
-		setInputValByName("login", "liyuan");
+		setInputValByName("login", "thinkgem");
 		setInputValByName("pwd", "admin");
 		
 	})
@@ -110,7 +110,7 @@
              var code  = getInputValByName("code");
 			
 	        if (login == '') {
-	            ErroAlert('请输入您的账号');
+	            ErroAlert('请输入您的账号');   
 	        } else if (pwd == '') {
 	            ErroAlert('请输入密码');
 	        } else if (code == '' || code.length != 4) {
@@ -120,7 +120,7 @@
 	         } else {
 	        	 
 	        	//登陆
-	           	var JsonData = { username: login, password: pwd, code: code, mobileLogin : 1};
+	           	var JsonData = { username: login, password: pwd, code: code};
 
 	           	httpPost("a/login",JsonData, function(data, status){window.location.href = IP_URL + "a";});
 	         }
