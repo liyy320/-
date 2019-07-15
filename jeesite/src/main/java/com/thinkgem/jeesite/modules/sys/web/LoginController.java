@@ -194,7 +194,7 @@ public class LoginController extends BaseController{
 ////		}
 //		System.out.println("==========================b");
 		
-		return "modules/Hui/sys/index";
+		return "modules/x-admin/sys/index";
 	}
 	
 	/**

@@ -176,7 +176,7 @@ function forEachMenu(parentId, list){
 	
 	for(var i=0;i<list.length;i++){
 		
-		if(list[i].parentId == parentId){
+		if(list[i].parentId == parentId && list[i].isShow != "0"){
 			
 			child.push(list[i]);
 			
